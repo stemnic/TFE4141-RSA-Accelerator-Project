@@ -1,5 +1,7 @@
-library ieee;
-use ieee.std_logic_1164.all;
+library ieee; 
+use ieee.std_logic_1164.all; 
+-- use ieee.std_logic_arith.all; 
+use ieee.std_logic_unsigned.all;
 use ieee.numeric_std.all;
 use std.env.stop;
 
@@ -28,19 +30,19 @@ architecture expBehave of exponentiation_tb is
 	constant clk_half_period : time := 0.5 ns;
 
 begin
-	i_exponentiation : entity work.exponentiation
-		port map (
-			message   => message  ,
-			key       => key      ,
-			valid_in  => valid_in ,
-			ready_in  => ready_in ,
-			ready_out => ready_out,
-			valid_out => valid_out,
-			result    => result   ,
-			modulus   => modulus  ,
-			clk       => clk      ,
-			reset_n   => reset_n
-		);
+--	i_exponentiation : entity work.exponentiation
+--		port map (
+--			message   => message  ,
+--			key       => key      ,
+--			valid_in  => valid_in ,
+--			ready_in  => ready_in ,
+--			ready_out => ready_out,
+--			valid_out => valid_out,
+--			result    => result   ,
+--			modulus   => modulus  ,
+--			clk       => clk      ,
+--			reset_n   => reset_n
+--		);
 	
 	i_blakley : entity work.blakley
 		port map (
@@ -56,13 +58,14 @@ begin
 	clk <= not clk after clk_half_period;
 	tb1 : process
 		begin
-			key <=  x"14CF4712797C0264D1C0CFA045228822769E76803651350AD5D68932E9C03859";
+--			key <= (others => '0');
+			key <=  std_logic_vector(to_unsigned(12, key'length));
 			message <=  std_logic_vector(to_unsigned(1337, message'length));
 			modulus <=  x"880A504783F52B6837819485374E67256A270C1B74D9779D86DEDA9CE4FE3F33";
 			reset_n <= '0', '1' after 2 ns;
 			wait for 2 ns;
 			start_calc <= '1';
-			wait for 10 ns;
+			wait for 1150 ns;
 			stop;
 	end process;
 
