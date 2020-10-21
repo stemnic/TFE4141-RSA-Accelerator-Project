@@ -35,7 +35,7 @@ end blakley;
 architecture modmult of blakley is
     TYPE State_type IS (idle, shift_prod, sub_once, sub, done);  -- Define the states
 	SIGNAL State : State_Type;    -- Create a signal that uses 
-    shared variable index : integer range 0 to 256;
+    shared variable index : integer range -1 to 256;
     shared variable tmp : STD_LOGIC_VECTOR(C_block_size-1 downto 0);
     shared variable sub_count : integer range 0 to 3;
 
@@ -75,36 +75,35 @@ begin
 --            index := finding_first_one(message); -- Start at MSB
             index := 255; -- Wastes time?
             State <= shift_prod;
+            -- Make modulus *2?
         END IF;
                 
 
         WHEN shift_prod => 
-           
-            IF message(index) = '1' THEN 
-                result(C_block_size -1 downto 0) <= std_logic_vector(shift_left(unsigned(result), 1) + unsigned(key)); 
-            ELSE
-                result(C_block_size-1 downto 0) <= std_logic_vector(shift_left(unsigned(result), 1));
-            END IF; 
-            
-            State <= sub;
-            IF index = 0 THEN -- Done calc 
+            IF index = -1 THEN -- Done calc 
                 State <= done;
-            END IF;
-
-            index := index - 1;
+            ELSE         
+                IF message(index) = '1' THEN 
+                    result(C_block_size -1 downto 0) <= std_logic_vector(shift_left(unsigned(result), 1) + unsigned(key)); 
+                ELSE
+                    result(C_block_size-1 downto 0) <= std_logic_vector(shift_left(unsigned(result), 1));
+                END IF; 
+                index := index - 1;
+                State <= sub;
+           END IF;
  
         WHEN sub => 
             sub_count := sub_count + 1;
-            IF sub_count = 3 THEN
+
+            IF sub_count = 3 THEN -- Do subtraction at most twice
                 sub_count := 0;
                 State <= shift_prod;
-                -- TODO: dette funker ikke
---            ELSE
---                tmp := STD_LOGIC_VECTOR(result - modulus); 
---                IF tmp(C_block_size-1) = '0' THEN
---                    result <= tmp;
---                END IF; 
-            END IF;
+            ELSE
+                IF (result >= modulus) THEN
+                        tmp := STD_LOGIC_VECTOR(result - modulus); -- TODO: fjerne tmp
+                        result <= tmp;
+                END IF;
+            END IF; 
 		
         WHEN done=> 
         done_calc <= '1'; 

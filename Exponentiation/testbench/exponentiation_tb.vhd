@@ -59,9 +59,10 @@ begin
 	tb1 : process
 		begin
 --			key <= (others => '0');
-			key <=  std_logic_vector(to_unsigned(12, key'length));
+			key <=  std_logic_vector(to_unsigned(20, key'length));
 			message <=  std_logic_vector(to_unsigned(1337, message'length));
-			modulus <=  x"880A504783F52B6837819485374E67256A270C1B74D9779D86DEDA9CE4FE3F33";
+--			modulus <=  x"880A504783F52B6837819485374E67256A270C1B74D9779D86DEDA9CE4FE3F33";
+            modulus <= std_logic_vector(to_unsigned(100, modulus'length));
 			reset_n <= '0', '1' after 2 ns;
 			wait for 2 ns;
 			start_calc <= '1';
