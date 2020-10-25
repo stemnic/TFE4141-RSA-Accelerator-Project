@@ -34,7 +34,7 @@ end blakley;
 
 architecture modmult of blakley is
     TYPE State_type IS (idle, shift_prod, sub_once, sub, done);  -- Define the states
-	SIGNAL State : State_Type;    -- Create a signal that uses 
+	SIGNAL State : State_Type; 
     shared variable index : integer range -1 to 256;
     shared variable tmp : STD_LOGIC_VECTOR(C_block_size-1 downto 0);
     shared variable sub_count : integer range 0 to 3;
@@ -95,6 +95,8 @@ begin
         WHEN sub => 
             sub_count := sub_count + 1;
 
+
+            -- TODO: Make an own peocess and paralleize
             IF sub_count = 3 THEN -- Do subtraction at most twice
                 sub_count := 0;
                 State <= shift_prod;
