@@ -13,8 +13,8 @@ entity blakley is
         start_calc	: in STD_LOGIC;
 
 		--input data
-		message 	: in STD_LOGIC_VECTOR ( C_block_size-1 downto 0 );
-		key 		: in STD_LOGIC_VECTOR ( C_block_size-1 downto 0 );
+		A 	: in STD_LOGIC_VECTOR ( C_block_size-1 downto 0 );
+		B 		: in STD_LOGIC_VECTOR ( C_block_size-1 downto 0 );
 
 		--ouput controll
 		done_calc	: out STD_LOGIC;
@@ -72,7 +72,7 @@ begin
         done_calc <= '0';
         tmp := (others => '0');
         IF (start_calc = '1') THEN
---            index := finding_first_one(message); -- Start at MSB
+--            index := finding_first_one(A); -- Start at MSB
             index := 255; -- Wastes time?
             State <= shift_prod;
             -- Make modulus *2?
@@ -83,10 +83,11 @@ begin
             IF index = -1 THEN -- Done calc 
                 State <= done;
             ELSE         
-                IF message(index) = '1' THEN 
-                    result(C_block_size -1 downto 0) <= std_logic_vector(shift_left(unsigned(result), 1) + unsigned(key)); 
+                IF A(index) = '1' THEN 
+                    -- Må utvide result med minst 1-bit, kanskje 2 
+                    result(C_block_size  downto 0) <= result & '0' + unsigned(B)); 
                 ELSE
-                    result(C_block_size-1 downto 0) <= std_logic_vector(shift_left(unsigned(result), 1));
+                    result(C_block_size downto 0) <= result & '0';
                 END IF; 
                 index := index - 1;
                 State <= sub;
@@ -108,7 +109,8 @@ begin
             END IF; 
 		
         WHEN done=> 
-        done_calc <= '1'; 
+        done_calc <= '1';
+        State <= idle; 
 
         WHEN others=>
         State <= idle;

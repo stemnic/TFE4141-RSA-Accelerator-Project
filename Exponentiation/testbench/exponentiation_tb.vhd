@@ -44,6 +44,15 @@ begin
 --			reset_n   => reset_n
 --		);
 	
+
+	--   # KEY N
+	--   99925173ad65686715385ea800cd28120288fc70a9bc98dd4c90d676f8ff768d
+	--   # KEY E
+	--   0000000000000000000000000000000000000000000000000000000000010001
+	--   # KEY D
+	--   0cea1651ef44be1f1f1476b7539bed10d73e3aac782bd9999a1e5a790932bfe9
+	--   
+
 	i_blakley : entity work.blakley
 		port map (
 			message   => message  ,
@@ -59,16 +68,66 @@ begin
 	tb1 : process
 		begin
 --			key <= (others => '0');
-			key <=  std_logic_vector(to_unsigned(20, key'length));
-			message <=  std_logic_vector(to_unsigned(1337, message'length));
+--			key <=  std_logic_vector(to_unsigned(20, key'length));
+--			message <=  std_logic_vector(to_unsigned(1337, message'length));
 --			modulus <=  x"880A504783F52B6837819485374E67256A270C1B74D9779D86DEDA9CE4FE3F33";
-            modulus <= std_logic_vector(to_unsigned(100, modulus'length));
+--			modulus <= std_logic_vector(to_unsigned(100, modulus'length));
+			report "********************************************************************************";
+			report "TESTING ENCRYPTION";
+			report "********************************************************************************";
+			-- RSA_accelerator/testbench/rsa_tests/short_tests/inp_messages/short_test.inp_messages.hex_pt0_in.txt
+			-- RSA_accelerator/testbench/rsa_tests/short_tests/otp_messages/short_test.otp_messages.hex_ct0_out.txt
+			key <= x"0000000000000000000000000000000000000000000000000000000000010001"; -- e
+			--key <= x"0cea1651ef44be1f1f1476b7539bed10d73e3aac782bd9999a1e5a790932bfe9"; -- d
+			modulus <= x"99925173ad65686715385ea800cd28120288fc70a9bc98dd4c90d676f8ff768d"; -- n
+			message <= x"0a23232323232323232323232323232323232323232323232323232323232323";
 			reset_n <= '0', '1' after 2 ns;
 			wait for 2 ns;
 			start_calc <= '1';
-			wait for 1150 ns;
+			wait until done_calc = '1';
+			assert result != x"85ee722363960779206a2b37cc8b64b5fc12a934473fa0204bbaaf714bc90c01"
+					report "Output message differs from the expected result"
+					severity Failure;
+			wait for 2 ns;
+			start_calc <= '0';
+			message <= x"0a232020207478742e6e695f307470203a2020202020202020202020454d414e";
+			wait for 2 ns;
+			start_calc <= '1';
+			wait until done_calc = '1';
+			assert result != x"08f9baf32e8505cbc9a28fed4d5791dce46508c3d1636232bf91f5d0b6632a9f"
+					report "Output message differs from the expected result"
+					severity Failure;
+			-- Done with encryption test
+			-- Starting with decryption test
+			start_calc <= '0';
+			wait for 2 ns;
+			report "********************************************************************************";
+			report "TESTING DECRYPTION";
+			report "********************************************************************************";
+			-- RSA_accelerator/testbench/rsa_tests/short_tests/inp_messages/short_test.inp_messages.hex_ct5_in.txt
+			-- RSA_accelerator/testbench/rsa_tests/short_tests/otp_messages/short_test.otp_messages.hex_pt5_out.txt
+			key <= x"0cea1651ef44be1f1f1476b7539bed10d73e3aac782bd9999a1e5a790932bfe9"; -- d
+			modulus <= x"99925173ad65686715385ea800cd28120288fc70a9bc98dd4c90d676f8ff768d"; -- n
+			message <= x"5635ab8cfd7390f2a13bd77238e4dfd2089e0216021806db3b4e8bee2b29c735";
+			wait for 2 ns;
+			start_calc <= '1';
+			assert result != x"2323232323232323232323232323232323232323232323232323232323232323"
+					report "Output message differs from the expected result"
+					severity Failure;
+			wait for 2 ns;
+			start_calc <= '0';
+			message <= x"85ee722363960779206a2b37cc8b64b5fc12a934473fa0204bbaaf714bc90c01";
+			wait for 2 ns;
+			start_calc <= '1';
+			wait until done_calc = '1';
+			assert result != x"0a23232323232323232323232323232323232323232323232323232323232323"
+					report "Output message differs from the expected result"
+					severity Failure;
 			stop;
 	end process;
 
+
+
+	
 
 end expBehave;
