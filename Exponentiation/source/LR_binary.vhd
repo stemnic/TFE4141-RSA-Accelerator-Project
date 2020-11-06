@@ -18,9 +18,10 @@ entity LR_binary is
 
 		--ouput controll
 		done_calc_LR	: out STD_LOGIC;
+		
 
 		--output data
-		result 		: out STD_LOGIC_VECTOR(C_block_size-1 downto 0);
+		result_LR 		: out STD_LOGIC_VECTOR(C_block_size-1 downto 0);
 
 		--modulus
 		modulus 	: in STD_LOGIC_VECTOR(C_block_size-1 downto 0);
@@ -34,10 +35,12 @@ end LR_binary;
 
 architecture expmod of LR_binary is
 	shared variable index : integer range -1 to 256;
+	signal d_index : std_logic_vector(9 downto 0);
 	TYPE State_type IS (idle, first_exponentiate, second_exponentiate, find_first_bit, done);  -- Define the states
 	SIGNAL State : State_Type; 
 	signal C : STD_LOGIC_VECTOR(C_block_size-1 downto 0);
     signal M 		: STD_LOGIC_VECTOR ( C_block_size-1 downto 0 );
+    signal result_blakley 		: STD_LOGIC_VECTOR ( C_block_size-1 downto 0 );
 	shared variable started : integer range 0 to 1;
 	signal start_blakley : std_logic;
 	signal done_calc_blakley : std_logic;
@@ -46,13 +49,13 @@ begin
 
 	blakley_one : entity work.blakley
 		port map ( 
-			A          => M  ,
+			A          => M ,
 			B          => C ,
 			start_calc => start_blakley ,
-			done_calc  => done_calc_blakley,
-			result     => result   ,
-			modulus    => modulus  ,
-			clk        => clk      ,
+			done_calc  => done_calc_blakley ,
+			result     => result_blakley ,
+			modulus    => modulus ,
+			clk        => clk ,
 			reset_n    => reset_n
 		);
 
@@ -60,19 +63,27 @@ begin
 process (clk, reset_n)
 begin 
 IF (reset_n = '0') then
-	result <= (others => '0');
-	index := C_block_size;
+	result_LR <= (others => '0');
+	index := C_block_size-1;
 	done_calc_LR <= '0';
+	State <= idle;
 ELSE
+    d_index <= std_logic_vector(to_unsigned(index, d_index'length));
 	Case State IS
 
 	when idle =>
-	result <= (others => '0'); -- Reset the result
+	--result <= (others => '0'); -- Reset the result
 	done_calc_LR <= '0';
 	C <= (others => '0');
 	IF (start_calc = '1') THEN
 		index := 255; -- Wastes time?
-		State <= find_first_bit;
+		State <= first_exponentiate;
+		result_LR <= (others => '0');
+		C(0) <= '1';
+		M <= (others => '0');
+		start_blakley <= '0';
+        started := 0;
+
 	END IF;
 
 	when find_first_bit =>
@@ -84,7 +95,7 @@ ELSE
 		end if;
 
 	when first_exponentiate =>
-	    if index = 0 then
+	    if index = -1 then
 	       State <= done;
 	    else
             if done_calc_blakley = '0' and started = 0 then
@@ -97,7 +108,8 @@ ELSE
             elsif done_calc_blakley = '1' and started = 1 then
                 started := 0;
                 start_blakley <= '1';
-                if message(index) = '1' then
+                C <= result_blakley;
+                if key(index) = '1' then
                     State <= second_exponentiate;
                 else 
                     State <= first_exponentiate;
@@ -111,22 +123,22 @@ ELSE
 			-- Do C*M mod N.
 			M <= message;
 			start_blakley <= '1';
+			started := 1;
 		elsif done_calc_blakley = '1' and started = 1 then
-		      C <= result;
-			start_blakley <= '0';
+		      started := 0;
+		      C <= result_blakley;
+			  start_blakley <= '0';
+			  State <= first_exponentiate;
 		end if;
 		
 	when done=>
-	   result <= C;
+	   result_LR <= C;
 	   done_calc_LR <= '1';
 	   State <= idle;
 	   
-	   
-
 	when others =>
 		State <=  idle;
 	
-
 	end case;
 	end if;
 		

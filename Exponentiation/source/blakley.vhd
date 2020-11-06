@@ -36,7 +36,7 @@ architecture modmult of blakley is
     TYPE State_type IS (idle, shift_prod, sub_once, sub, done);  -- Define the states
 	SIGNAL State : State_Type; 
     shared variable index : integer range -1 to 256;
-    shared variable tmp : STD_LOGIC_VECTOR(C_block_size downto 0);
+    shared variable tmp : STD_LOGIC_VECTOR(C_block_size+1 downto 0);
     shared variable sub_count : integer range 0 to 3;
 
 
@@ -85,9 +85,9 @@ begin
             ELSE         
                 IF A(index) = '1' THEN 
                     -- Må utvide result med minst 1-bit, kanskje 2 
-                    tmp(C_block_size  downto 0) := STD_LOGIC_VECTOR(result & '0') + B; 
+                    tmp(C_block_size+1 downto 0) := std_logic_vector(shift_left(unsigned(tmp), 1) + unsigned(B));  
                 ELSE
-                    tmp(C_block_size downto 0) := result & '0';
+                    tmp(C_block_size+1 downto 0) := std_logic_vector(shift_left(unsigned(tmp), 1));
                 END IF; 
                 index := index - 1;
                 State <= sub;
@@ -96,8 +96,6 @@ begin
         WHEN sub => 
             sub_count := sub_count + 1;
 
-
-            -- TODO: Make an own peocess and paralleize
             IF sub_count = 3 THEN -- Do subtraction at most twice
                 sub_count := 0;
                 State <= shift_prod;
@@ -109,9 +107,10 @@ begin
 
 		
         WHEN done=> 
-        result <= tmp(C_block_size-1  downto 0);
+        --result <= tmp(C_block_size-1  downto 0);
         done_calc <= '1';
         State <= idle; 
+        result <= tmp(C_block_size-1 downto 0);
 
         WHEN others=>
         State <= idle;
