@@ -14,7 +14,7 @@ entity blakley is
 
 		--input data
 		A 	: in STD_LOGIC_VECTOR ( C_block_size-1 downto 0 );
-		B 		: in STD_LOGIC_VECTOR ( C_block_size-1 downto 0 );
+		B 	: in STD_LOGIC_VECTOR ( C_block_size-1 downto 0 );
 
 		--ouput controll
 		done_calc	: out STD_LOGIC;
@@ -36,7 +36,7 @@ architecture modmult of blakley is
     TYPE State_type IS (idle, shift_prod, sub_once, sub, done);  -- Define the states
 	SIGNAL State : State_Type; 
     shared variable index : integer range -1 to 256;
-    shared variable tmp : STD_LOGIC_VECTOR(C_block_size-1 downto 0);
+    shared variable tmp : STD_LOGIC_VECTOR(C_block_size downto 0);
     shared variable sub_count : integer range 0 to 3;
 
 
@@ -85,9 +85,9 @@ begin
             ELSE         
                 IF A(index) = '1' THEN 
                     -- Må utvide result med minst 1-bit, kanskje 2 
-                    result(C_block_size  downto 0) <= result & '0' + unsigned(B)); 
+                    tmp(C_block_size  downto 0) := STD_LOGIC_VECTOR(result & '0') + B; 
                 ELSE
-                    result(C_block_size downto 0) <= result & '0';
+                    tmp(C_block_size downto 0) := result & '0';
                 END IF; 
                 index := index - 1;
                 State <= sub;
@@ -102,13 +102,14 @@ begin
                 sub_count := 0;
                 State <= shift_prod;
             ELSE
-                IF (result >= modulus) THEN
-                        tmp := STD_LOGIC_VECTOR(result - modulus); -- TODO: fjerne tmp
-                        result <= tmp;
+                IF (tmp >= modulus) THEN
+                        tmp := STD_LOGIC_VECTOR(tmp - modulus);
                 END IF;
             END IF; 
+
 		
         WHEN done=> 
+        result <= tmp(C_block_size-1  downto 0);
         done_calc <= '1';
         State <= idle; 
 

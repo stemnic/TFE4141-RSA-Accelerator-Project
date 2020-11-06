@@ -30,20 +30,7 @@ architecture expBehave of exponentiation_tb is
 	constant clk_half_period : time := 0.5 ns;
 
 begin
---	i_exponentiation : entity work.exponentiation
---		port map (
---			message   => message  ,
---			key       => key      ,
---			valid_in  => valid_in ,
---			ready_in  => ready_in ,
---			ready_out => ready_out,
---			valid_out => valid_out,
---			result    => result   ,
---			modulus   => modulus  ,
---			clk       => clk      ,
---			reset_n   => reset_n
---		);
-	
+
 
 	--   # KEY N
 	--   99925173ad65686715385ea800cd28120288fc70a9bc98dd4c90d676f8ff768d
@@ -53,12 +40,12 @@ begin
 	--   0cea1651ef44be1f1f1476b7539bed10d73e3aac782bd9999a1e5a790932bfe9
 	--   
 
-	i_blakley : entity work.blakley
+	i_LR_bin : entity work.LR_binary
 		port map (
 			message   => message  ,
 			key       => key      ,
 			start_calc  => start_calc ,
-			done_calc => done_calc,
+			done_calc_LR => done_calc,
 			result    => result   ,
 			modulus   => modulus  ,
 			clk       => clk      ,
@@ -85,7 +72,7 @@ begin
 			wait for 2 ns;
 			start_calc <= '1';
 			wait until done_calc = '1';
-			assert result != x"85ee722363960779206a2b37cc8b64b5fc12a934473fa0204bbaaf714bc90c01"
+			assert result /= x"85ee722363960779206a2b37cc8b64b5fc12a934473fa0204bbaaf714bc90c01"
 					report "Output message differs from the expected result"
 					severity Failure;
 			wait for 2 ns;
@@ -94,7 +81,7 @@ begin
 			wait for 2 ns;
 			start_calc <= '1';
 			wait until done_calc = '1';
-			assert result != x"08f9baf32e8505cbc9a28fed4d5791dce46508c3d1636232bf91f5d0b6632a9f"
+			assert result /= x"08f9baf32e8505cbc9a28fed4d5791dce46508c3d1636232bf91f5d0b6632a9f"
 					report "Output message differs from the expected result"
 					severity Failure;
 			-- Done with encryption test
@@ -111,7 +98,7 @@ begin
 			message <= x"5635ab8cfd7390f2a13bd77238e4dfd2089e0216021806db3b4e8bee2b29c735";
 			wait for 2 ns;
 			start_calc <= '1';
-			assert result != x"2323232323232323232323232323232323232323232323232323232323232323"
+			assert result /= x"2323232323232323232323232323232323232323232323232323232323232323"
 					report "Output message differs from the expected result"
 					severity Failure;
 			wait for 2 ns;
@@ -120,7 +107,7 @@ begin
 			wait for 2 ns;
 			start_calc <= '1';
 			wait until done_calc = '1';
-			assert result != x"0a23232323232323232323232323232323232323232323232323232323232323"
+			assert result /= x"0a23232323232323232323232323232323232323232323232323232323232323"
 					report "Output message differs from the expected result"
 					severity Failure;
 			stop;
