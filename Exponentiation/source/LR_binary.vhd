@@ -6,48 +6,47 @@ use ieee.numeric_std.all;
 
 entity LR_binary is
 	generic (
-		C_block_size : integer := 256
+		C_block_size    : integer := 256
 	);
 	port (
 		--input controll
-        start_calc	: in STD_LOGIC := '0';
+        start_calc 	 	: in STD_LOGIC := '0';
 
 		--input data
-		message 	: in STD_LOGIC_VECTOR ( C_block_size-1 downto 0 );
-		key 		: in STD_LOGIC_VECTOR ( C_block_size-1 downto 0 );
+		message		 	: in STD_LOGIC_VECTOR ( C_block_size-1 downto 0 );
+		key 		 	: in STD_LOGIC_VECTOR ( C_block_size-1 downto 0 );
 
 		--ouput controll
-		done_calc_LR	: out STD_LOGIC;
-		
+		done_calc_LR    : out STD_LOGIC;
 
 		--output data
 		result_LR 		: out STD_LOGIC_VECTOR(C_block_size-1 downto 0);
 
 		--modulus
-		modulus 	: in STD_LOGIC_VECTOR(C_block_size-1 downto 0);
+		modulus 	    : in STD_LOGIC_VECTOR(C_block_size-1 downto 0);
 
 		--utility
-		clk 		: in STD_LOGIC;
-		reset_n 	: in STD_LOGIC
+		clk 		    : in STD_LOGIC;
+		reset_n 	    : in STD_LOGIC
 	);
 end LR_binary;
 
 
 architecture expmod of LR_binary is
-	shared variable index : integer range -1 to 256;
-	signal d_index : std_logic_vector(9 downto 0);
+	signal d_index          : std_logic_vector(9 downto 0); -- For debugging
 	TYPE State_type IS (idle, first_exponentiate, second_exponentiate, find_first_bit, done);  -- Define the states
-	SIGNAL State : State_Type; 
-	signal C : STD_LOGIC_VECTOR(C_block_size-1 downto 0);
-    signal M 		: STD_LOGIC_VECTOR ( C_block_size-1 downto 0 );
-    signal result_blakley 		: STD_LOGIC_VECTOR ( C_block_size-1 downto 0 );
+	SIGNAL State            : State_Type; 
+	signal C                : STD_LOGIC_VECTOR(C_block_size-1 downto 0);
+    signal M 		        : STD_LOGIC_VECTOR ( C_block_size-1 downto 0 );
+	shared variable index   : integer range -1 to 256; 
+    signal result_blakley   : STD_LOGIC_VECTOR ( C_block_size-1 downto 0 );
 	shared variable started : integer range 0 to 1;
-	signal start_blakley : std_logic;
-	signal done_calc_blakley : std_logic;
+	signal start_blakley    : std_logic;
+	signal done_calc_blakley: std_logic;
 
 begin
 
-	blakley_one : entity work.blakley
+	blakley : entity work.blakley
 		port map ( 
 			A          => M ,
 			B          => C ,
@@ -68,26 +67,27 @@ IF (reset_n = '0') then
 	done_calc_LR <= '0';
 	State <= idle;
 ELSE
-    d_index <= std_logic_vector(to_unsigned(index, d_index'length));
+    d_index <= std_logic_vector(to_unsigned(index, d_index'length)); -- For debugging
 	Case State IS
 
 	when idle =>
-	--result <= (others => '0'); -- Reset the result
-	done_calc_LR <= '0';
-	C <= (others => '0');
-	IF (start_calc = '1') THEN
-		index := 255; -- Wastes time?
-		State <= first_exponentiate;
+		done_calc_LR <= '0';
 		result_LR <= (others => '0');
-		C(0) <= '1';
-		M <= (others => '0');
-		start_blakley <= '0';
-        started := 0;
+
+		IF (start_calc = '1') THEN
+			index := 255;
+			result_LR <= (others => '0');
+			C <= (others => '0');
+			C(0) <= '1';
+			M <= (others => '0');
+			start_blakley <= '0';
+			started := 0;
+			State <= find_first_bit;
 
 	END IF;
 
 	when find_first_bit =>
-		if message(index) = '1' then
+		if key(index) = '1' then
 			C <= message;
 			State <= first_exponentiate;
 		else
@@ -99,9 +99,9 @@ ELSE
 	       State <= done;
 	    else
             if done_calc_blakley = '0' and started = 0 then
-                index := index -1;
                 -- Do C*C mod N.
                 -- Set A=B=C
+                index := index -1;
                 M <= C;
                 start_blakley <= '1';
                 started := 1;
@@ -137,7 +137,7 @@ ELSE
 	   State <= idle;
 	   
 	when others =>
-		State <=  idle;
+		State <= idle;
 	
 	end case;
 	end if;

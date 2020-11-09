@@ -21,7 +21,7 @@ architecture expBehave of exponentiation_tb is
 	signal ready_out 	: STD_LOGIC;
 	signal valid_out 	: STD_LOGIC;
 	signal start_calc   : STD_LOGIC;
-    signal start_calc_BL   : STD_LOGIC;
+    signal start_calc_BL: STD_LOGIC;
 	signal done_calc	: STD_LOGIC;
     signal done_calc_BL	: STD_LOGIC;
 	signal result 		: STD_LOGIC_VECTOR(C_block_size-1 downto 0);
@@ -36,36 +36,28 @@ architecture expBehave of exponentiation_tb is
 begin
 
 
-	--   # KEY N
-	--   99925173ad65686715385ea800cd28120288fc70a9bc98dd4c90d676f8ff768d
-	--   # KEY E
-	--   0000000000000000000000000000000000000000000000000000000000010001
-	--   # KEY D
-	--   0cea1651ef44be1f1f1476b7539bed10d73e3aac782bd9999a1e5a790932bfe9
-	--   
-
 	i_LR_bin : entity work.LR_binary
 		port map (
-			message   => message  ,
-			key       => key      ,
-			start_calc  => start_calc ,
-			done_calc_LR => done_calc,
-			result_LR    => result   ,
-			modulus   => modulus  ,
-			clk       => clk      ,
-			reset_n   => reset_n
+			message   		=> message,
+			key       		=> key,
+			start_calc  	=> start_calc,
+			done_calc_LR 	=> done_calc,
+			result_LR    	=> result,
+			modulus   		=> modulus,
+			clk       		=> clk,
+			reset_n   		=> reset_n
 		);
 		
 	i_Blakley : entity work.blakley
 	   port map (
-            A   => message  ,
-            B       => key      ,
-            start_calc  => start_calc_BL ,
-            done_calc => done_calc_BL,
-            result    => result_BL   ,
-            modulus   => modulus  ,
-            clk       => clk      ,
-            reset_n   => reset_n
+            A   		=> message,
+            B       	=> key,
+            start_calc  => start_calc_BL,
+            done_calc 	=> done_calc_BL,
+            result    	=> result_BL,
+            modulus   	=> modulus,
+            clk       	=> clk,
+            reset_n   	=> reset_n
 	   );	
 	
 	clk <= not clk after clk_half_period;
@@ -90,12 +82,6 @@ begin
 					severity Failure;
 			wait for 2 ns;
 			
-		
---			key <= (others => '0');
---			key <=  std_logic_vector(to_unsigned(20, key'length));
---			message <=  std_logic_vector(to_unsigned(1337, message'length));
---			modulus <=  x"880A504783F52B6837819485374E67256A270C1B74D9779D86DEDA9CE4FE3F33";
---			modulus <= std_logic_vector(to_unsigned(100, modulus'length));
 			report "********************************************************************************";
 			report "TESTING ENCRYPTION";
 			report "********************************************************************************";
@@ -124,19 +110,20 @@ begin
 					severity Failure;
 			-- Done with encryption test
 			-- Starting with decryption test
-			start_calc <= '0';
 			wait for 2 ns;
 			report "********************************************************************************";
 			report "TESTING DECRYPTION";
 			report "********************************************************************************";
 			-- RSA_accelerator/testbench/rsa_tests/short_tests/inp_messages/short_test.inp_messages.hex_ct5_in.txt
 			-- RSA_accelerator/testbench/rsa_tests/short_tests/otp_messages/short_test.otp_messages.hex_pt5_out.txt
+            start_calc <= '0';
 			key <= x"0cea1651ef44be1f1f1476b7539bed10d73e3aac782bd9999a1e5a790932bfe9"; -- d
 			modulus <= x"99925173ad65686715385ea800cd28120288fc70a9bc98dd4c90d676f8ff768d"; -- n
 			message <= x"5635ab8cfd7390f2a13bd77238e4dfd2089e0216021806db3b4e8bee2b29c735";
 			reset_n <= '0', '1' after 2 ns;
 			wait for 2 ns;
 			start_calc <= '1';
+            wait until done_calc = '1';
 			assert result = x"2323232323232323232323232323232323232323232323232323232323232323"
 					report "Output message differs from the expected result"
 					severity Failure;
