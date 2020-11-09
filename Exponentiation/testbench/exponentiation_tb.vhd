@@ -36,17 +36,20 @@ architecture expBehave of exponentiation_tb is
 begin
 
 
-	i_LR_bin : entity work.LR_binary
+	i_exponentiation : entity work.exponentiation
 		port map (
-			message   		=> message,
-			key       		=> key,
-			start_calc  	=> start_calc,
-			done_calc_LR 	=> done_calc,
-			result_LR    	=> result,
-			modulus   		=> modulus,
-			clk       		=> clk,
-			reset_n   		=> reset_n
+			message   => message  ,
+			key       => key      ,
+			valid_in  => valid_in ,
+			ready_in  => ready_in ,
+			ready_out => ready_out,
+			valid_out => valid_out,
+			result    => result   ,
+			modulus   => modulus  ,
+			clk       => clk      ,
+			reset_n   => reset_n
 		);
+			
 		
 	i_Blakley : entity work.blakley
 	   port map (
@@ -93,18 +96,19 @@ begin
 			message <= x"0a23232323232323232323232323232323232323232323232323232323232323";
 			reset_n <= '0', '1' after 2 ns;
 			wait for 2 ns;
-			start_calc <= '1';
-			wait until done_calc = '1';
+			valid_in <= '1';
+			ready_out <= '1';
+			wait until valid_out = '1';
 			assert result = x"85ee722363960779206a2b37cc8b64b5fc12a934473fa0204bbaaf714bc90c01"
 					report "Output message differs from the expected result"
 					severity Failure;
 			wait for 2 ns;
-			start_calc <= '0';
+			valid_in <= '0';
 			message <= x"0a232020207478742e6e695f307470203a2020202020202020202020454d414e";
             reset_n <= '0', '1' after 2 ns;
 			wait for 2 ns;
-			start_calc <= '1';
-			wait until done_calc = '1';
+			valid_in <= '1';
+			wait until valid_out = '1';
 			assert result = x"08f9baf32e8505cbc9a28fed4d5791dce46508c3d1636232bf91f5d0b6632a9f"
 					report "Output message differs from the expected result"
 					severity Failure;
@@ -116,24 +120,24 @@ begin
 			report "********************************************************************************";
 			-- RSA_accelerator/testbench/rsa_tests/short_tests/inp_messages/short_test.inp_messages.hex_ct5_in.txt
 			-- RSA_accelerator/testbench/rsa_tests/short_tests/otp_messages/short_test.otp_messages.hex_pt5_out.txt
-            start_calc <= '0';
+            valid_in <= '0';
 			key <= x"0cea1651ef44be1f1f1476b7539bed10d73e3aac782bd9999a1e5a790932bfe9"; -- d
 			modulus <= x"99925173ad65686715385ea800cd28120288fc70a9bc98dd4c90d676f8ff768d"; -- n
 			message <= x"5635ab8cfd7390f2a13bd77238e4dfd2089e0216021806db3b4e8bee2b29c735";
 			reset_n <= '0', '1' after 2 ns;
 			wait for 2 ns;
-			start_calc <= '1';
-            wait until done_calc = '1';
+			valid_in <= '1';
+            wait until valid_out = '1';
 			assert result = x"2323232323232323232323232323232323232323232323232323232323232323"
 					report "Output message differs from the expected result"
 					severity Failure;
 			wait for 2 ns;
-			start_calc <= '0';
+			valid_in <= '0';
 			message <= x"85ee722363960779206a2b37cc8b64b5fc12a934473fa0204bbaaf714bc90c01";
 			reset_n <= '0', '1' after 2 ns;
 			wait for 2 ns;
-			start_calc <= '1';
-			wait until done_calc = '1';
+			valid_in <= '1';
+			wait until valid_out = '1';
 			assert result = x"0a23232323232323232323232323232323232323232323232323232323232323"
 					report "Output message differs from the expected result"
 					severity Failure;
