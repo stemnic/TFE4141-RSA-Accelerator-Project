@@ -43,6 +43,9 @@ architecture expBehave of exponentiation is -- Using LR_binary
 	shared variable index   : integer range -1 to 256; 
     signal result_blakley   : STD_LOGIC_VECTOR ( C_block_size-1 downto 0 );
     signal M_reg : STD_LOGIC_VECTOR ( C_block_size-1 downto 0 );
+    signal K_reg : STD_LOGIC_VECTOR ( C_block_size-1 downto 0 );
+
+    
 	shared variable started : integer range 0 to 1;
 	signal start_blakley    : std_logic;
 	signal done_calc_blakley: std_logic;
@@ -72,63 +75,58 @@ IF (reset_n = '0') then
 	ready_in <= '0';
 	valid_out <= '0';
 	State <= idle;
-ELSE 
+ELSE
     d_index <= std_logic_vector(to_unsigned(index, d_index'length)); -- For debugging
 	Case State IS
 
 	when idle =>
-		--ready_in <= '1';
         C <= (others => '0');
         M_reg <= (others => '0');
-        --ready_in <= '0';
-		IF (valid_in = '1') THEN
-		  ready_in <= '1';
+        ready_in <= '0';
+
+		IF (valid_in = '1') and falling_edge(clk) THEN
+		    result <= (others => '0');
+		    valid_out <= '0';
 			index := 255;
-			
+			K_reg <= key;
 			M_reg <= message;
-			
 			C <= message;
---			
---			C(0) <= '1';
 			start_blakley <= '0';
 			started := 0;
 			State <= find_first_bit;
-
---			ready_in <= '0';
-
 	   END IF;
 
 	when find_first_bit =>
-        ready_in <= '0';
-		if key(index) = '1' then
---			C <= message;
+		if K_reg(index) = '1' then
 			State <= first_exponentiate;
 		else
 			index := index -1;
 		end if;
 
 	when first_exponentiate =>
-	    if index = -1 then
-	       State <= done;
-	    else
-            if done_calc_blakley = '0' and started = 0 then
-                -- Do C*C mod N.
-                -- Set A=B=C
-                index := index -1;
+	   
+        if done_calc_blakley = '0' and started = 0 then
+            -- Do C*C mod N.
+            -- Set A=B=C
+             index := index -1;
+             if index = -1 then
+               State <= done;
+             else
                 M <= C;
                 start_blakley <= '1';
                 started := 1;
-            elsif done_calc_blakley = '1' and started = 1 then
-                started := 0;
-                start_blakley <= '1';
-                C <= result_blakley;
-                if key(index) = '1' then
-                    State <= second_exponentiate;
-                else 
-                    State <= first_exponentiate;
-              end if;
-            end if;
-         end if;
+             end if;
+            
+        elsif done_calc_blakley = '1' and started = 1 then
+            started := 0;
+            start_blakley <= '0';
+            C <= result_blakley;
+            if K_reg(index) = '1' then
+                State <= second_exponentiate;
+            else 
+                State <= first_exponentiate;
+          end if;
+        end if;
 
 	when second_exponentiate =>
 		if done_calc_blakley = '0' and started = 0 then
@@ -145,9 +143,10 @@ ELSE
 		end if;
 		
 	when done=>
+        valid_out <= '1';
+        result <= C;
 		if ready_out = '1' then
-			result <= C;
-			valid_out <= '1';
+		    ready_in <= '1';
 			State <= idle;
 		end if;
 

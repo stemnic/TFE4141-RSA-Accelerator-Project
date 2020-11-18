@@ -54,9 +54,9 @@ begin
     
 
         WHEN idle => 
-            result <= (others => '0'); -- Reset the result
             done_calc <= '0';
             IF (start_calc = '1') THEN
+                result <= (others => '0'); -- Reset the result
                 tmp := (others => '0');
                 index := C_block_size-1;
                 State <= find_first_bit;
