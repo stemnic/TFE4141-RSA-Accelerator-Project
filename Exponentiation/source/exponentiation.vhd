@@ -42,6 +42,7 @@ architecture expBehave of exponentiation is -- Using LR_binary
     signal M 		        : STD_LOGIC_VECTOR ( C_block_size-1 downto 0 );
 	shared variable index   : integer range -1 to 256; 
     signal result_blakley   : STD_LOGIC_VECTOR ( C_block_size-1 downto 0 );
+    signal M_reg : STD_LOGIC_VECTOR ( C_block_size-1 downto 0 );
 	shared variable started : integer range 0 to 1;
 	signal start_blakley    : std_logic;
 	signal done_calc_blakley: std_logic;
@@ -60,6 +61,8 @@ begin
 			reset_n    => reset_n
 		);
 
+
+
  
 process (clk, reset_n)
 begin 
@@ -69,29 +72,36 @@ IF (reset_n = '0') then
 	ready_in <= '0';
 	valid_out <= '0';
 	State <= idle;
-ELSE
+ELSE 
     d_index <= std_logic_vector(to_unsigned(index, d_index'length)); -- For debugging
 	Case State IS
 
 	when idle =>
-		ready_in <= '1';
-
+		--ready_in <= '1';
+        C <= (others => '0');
+        M_reg <= (others => '0');
+        --ready_in <= '0';
 		IF (valid_in = '1') THEN
+		  ready_in <= '1';
 			index := 255;
-			result <= (others => '0');
-			C <= (others => '0');
-			C(0) <= '1';
-			M <= (others => '0');
+			
+			M_reg <= message;
+			
+			C <= message;
+--			
+--			C(0) <= '1';
 			start_blakley <= '0';
 			started := 0;
 			State <= find_first_bit;
-			ready_in <= '0';
 
-	END IF;
+--			ready_in <= '0';
+
+	   END IF;
 
 	when find_first_bit =>
+        ready_in <= '0';
 		if key(index) = '1' then
-			C <= message;
+--			C <= message;
 			State <= first_exponentiate;
 		else
 			index := index -1;
@@ -124,7 +134,7 @@ ELSE
 		if done_calc_blakley = '0' and started = 0 then
 			-- Set A = C, B = M
 			-- Do C*M mod N.
-			M <= message;
+			M <= M_reg;
 			start_blakley <= '1';
 			started := 1;
 		elsif done_calc_blakley = '1' and started = 1 then

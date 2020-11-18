@@ -22,7 +22,6 @@ architecture expBehave of exponentiation_tb is
 	signal valid_out 	: STD_LOGIC;
 	signal start_calc   : STD_LOGIC;
     signal start_calc_BL: STD_LOGIC;
-	signal done_calc	: STD_LOGIC;
     signal done_calc_BL	: STD_LOGIC;
 	signal result 		: STD_LOGIC_VECTOR(C_block_size-1 downto 0);
     signal result_BL    : STD_LOGIC_VECTOR(C_block_size-1 downto 0);

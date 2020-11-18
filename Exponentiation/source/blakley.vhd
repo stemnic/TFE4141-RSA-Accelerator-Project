@@ -43,15 +43,14 @@ begin
     PROCESS (clk, reset_n) 
     BEGIN 
 	If (reset_n = '0') THEN 
-    State <= idle;
-    result <= (others => '0'); -- Reset the result
-    index := C_block_size;
-    done_calc <= '0';
+        State <= idle;
+        result <= (others => '0'); -- Reset the result
+        index := C_block_size-1;
+        done_calc <= '0';
  
-    ELSIF rising_edge(clk) THEN    -- if there is a rising edge of the
-			 -- clock, then do the stuff below
+    ELSIF falling_edge(clk) THEN 
  
-    CASE State IS
+    CASE State IS 
     
 
         WHEN idle => 
@@ -59,14 +58,14 @@ begin
             done_calc <= '0';
             IF (start_calc = '1') THEN
                 tmp := (others => '0');
-                index := 255;
+                index := C_block_size-1;
                 State <= find_first_bit;
                 -- Make modulus *2?
         END IF;
         
         when find_first_bit =>
-            IF index = -1 THEN -- Done calc 
-                State <= done;
+            IF index = -1 THEN 
+                State <= done; --edge case
             ELSE         
                 IF A(index) = '1' THEN 
                     State <= shift_prod;
