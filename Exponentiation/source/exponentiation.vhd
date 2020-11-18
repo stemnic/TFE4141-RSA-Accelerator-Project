@@ -87,7 +87,8 @@ ELSE
         M_reg <= (others => '0');
         ready_in <= '1';
 		IF (valid_in = '1') and falling_edge(clk) THEN
-		    --result <= (others => '0');
+			--result <= (others => '0');
+			msgout_last <= msgin_last;
 		    valid_out <= '0';
 			index := 255;
 			K_reg <= key;
@@ -146,7 +147,7 @@ ELSE
 		end if;
 		
 	when done=>
-        valid_out <= '1';
+		valid_out <= '1';
         result <= C;
 		if ready_out = '1' then
 			State <= idle;
