@@ -1,0 +1,975 @@
+
+% Default to the notebook output style
+
+    
+
+
+% Inherit from the specified cell style.
+
+
+
+
+    
+\documentclass[11pt]{article}
+
+    
+    
+    \usepackage[T1]{fontenc}
+    % Nicer default font (+ math font) than Computer Modern for most use cases
+    \usepackage{mathpazo}
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % We will generate all images so they have a width \maxwidth. This means
+    % that they will get their normal width if they fit onto the page, but
+    % are scaled down if they would overflow the margins.
+    \makeatletter
+    \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth
+    \else\Gin@nat@width\fi}
+    \makeatother
+    \let\Oldincludegraphics\includegraphics
+    % Set max figure width to be 80% of text width, for now hardcoded.
+    \renewcommand{\includegraphics}[1]{\Oldincludegraphics[width=.8\maxwidth]{#1}}
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionLabelFormat{nolabel}{}
+    \captionsetup{labelformat=nolabel}
+
+    \usepackage{adjustbox} % Used to constrain images to a maximum size 
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+    \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+    \usepackage[utf8x]{inputenc} % Allow utf-8 characters in the tex document
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics 
+                         % to support a larger range 
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    
+
+    
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+    
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    
+    
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatability definitions
+    \def\gt{>}
+    \def\lt{<}
+    % Document parameters
+    \title{RSA Integration Kit}
+    
+    
+    
+
+    % Pygments definitions
+    
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\expandafter\def\csname PY@tok@w\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\expandafter\def\csname PY@tok@c\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.74,0.48,0.00}{##1}}}
+\expandafter\def\csname PY@tok@k\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\expandafter\def\csname PY@tok@o\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ow\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@ne\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\expandafter\def\csname PY@tok@nv\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@no\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ni\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\expandafter\def\csname PY@tok@na\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.49,0.56,0.16}{##1}}}
+\expandafter\def\csname PY@tok@nt\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@s\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sd\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@si\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@se\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sr\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@ss\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sx\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@m\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@gh\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gu\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gr\endcsname{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ge\endcsname{\let\PY@it=\textit}
+\expandafter\def\csname PY@tok@gs\endcsname{\let\PY@bf=\textbf}
+\expandafter\def\csname PY@tok@gp\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@go\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\expandafter\def\csname PY@tok@gt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\expandafter\def\csname PY@tok@err\endcsname{\def\PY@bc##1{\setlength{\fboxsep}{0pt}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}
+\expandafter\def\csname PY@tok@kc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kd\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kr\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@bp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@fm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@vc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vg\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sa\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@dl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s2\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s1\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@mb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@il\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mo\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ch\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cm\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cpf\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@c1\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cs\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % Exact colors from NB
+    \definecolor{incolor}{rgb}{0.0, 0.0, 0.5}
+    \definecolor{outcolor}{rgb}{0.545, 0.0, 0.0}
+
+
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy 
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+    \begin{document}
+    
+    
+    \maketitle
+    
+    
+
+    
+    \section{RSA Integration Kit}\label{rsa-integration-kit}
+
+This document demonstrates encryption and decryption of a file using a
+dedicated RSA accelerator for the PYNQ platform. It is developed as a
+part of the term project given in the course TFE4141 Design of Digital
+Systems 1 at the Department of Electronic Systems at the Norwegian
+University of Science and Technology.
+
+    \section{Digital design flow}\label{digital-design-flow}
+
+Before starting the work on designing a digital circuit, a reminder of
+the digital hardware design flow is in place.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\item
+  Capture the requirements
+\item
+  Create a high level functional model. This model must produce the
+  correct result, but is written at a very high abstraction level.
+\item
+  Design exploration. Use models at different abstraction levels. Try
+  out different algorithms. What asymptotic complexity do they have? Is
+  the problem parallelizable in any way? Can you use multiple cores
+  and/or pipeline the design to increase the throughput?
+\item
+  Propose a microarchitecture at the register transfer level. The block
+  diagram should be detailed enough that it identifies registers, muxes,
+  adders and similar units.
+\item
+  Estimate the performance and the area of your design. Estimate the
+  clock frequency as well as the throughput.
+\item
+  Write the RTL kode for your design.
+\item
+  Verify functional correctness of the design. Use e.g. constrained
+  random self checking testbenches or formal verification.
+\item
+  Verify the performance of the design. Create special test in order to
+  check that the performance is as expected.
+\item
+  Prototype the design e.g. on an FPGA. Do system testing.
+\end{enumerate}
+
+    \section{Constants}\label{constants}
+
+The following constants must be set to the appropriate values before
+attempting any encrypt/decrypt operations.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}1}]:} \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{c+c1}{\PYZsh{} Set the blocksize}
+        \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{n}{C\PYZus{}BLOCKSIZE\PYZus{}IN\PYZus{}BITS}         \PY{o}{=} \PY{l+m+mi}{256}
+        \PY{n}{C\PYZus{}BLOCKSIZE\PYZus{}IN\PYZus{}32\PYZus{}BIT\PYZus{}WORDS} \PY{o}{=} \PY{l+m+mi}{8}
+        \PY{n}{C\PYZus{}BLOCKSIZE\PYZus{}IN\PYZus{}BYTES}        \PY{o}{=} \PY{l+m+mi}{32}
+        
+        \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{c+c1}{\PYZsh{} It is possible to choose between two different algorithms: }
+        \PY{c+c1}{\PYZsh{}   XOR: This is the algorithm you can use for testing the system before you}
+        \PY{c+c1}{\PYZsh{}        have integrated the RSA hardware accelerator.}
+        \PY{c+c1}{\PYZsh{}        Computes: C=M xor n, M=C xor n}
+        \PY{c+c1}{\PYZsh{}}
+        \PY{c+c1}{\PYZsh{}   RSA: This is the algorithm you must enable when you have integrated the}
+        \PY{c+c1}{\PYZsh{}        RSA hardware accelerator.}
+        \PY{c+c1}{\PYZsh{}        Computes: C=M**e mod n, M=C**d mod n}
+        \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{n}{C\PYZus{}ENCR\PYZus{}ALGORITHM\PYZus{}XOR} \PY{o}{=} \PY{l+m+mi}{0}
+        \PY{n}{C\PYZus{}ENCR\PYZus{}ALGORITHM\PYZus{}RSA} \PY{o}{=} \PY{l+m+mi}{1}
+        \PY{n}{C\PYZus{}ENCR\PYZus{}ALGORITHM} \PY{o}{=} \PY{n}{C\PYZus{}ENCR\PYZus{}ALGORITHM\PYZus{}XOR}
+        
+        \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{c+c1}{\PYZsh{} Import python libraries}
+        \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+        \PY{k+kn}{import} \PY{n+nn}{time}
+\end{Verbatim}
+
+
+    \section{Utility functions}\label{utility-functions}
+
+Messages will be read and written to files and sent in and out of the
+Pynq platform. In the following section a few utility functions for
+moving and converting data has been implemented.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}2}]:} \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{c+c1}{\PYZsh{} Function for converting an array of messages to a numpy array of 32\PYZhy{}bit words}
+        \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{k}{def} \PY{n+nf}{msg2word}\PY{p}{(}\PY{n}{msg\PYZus{}array}\PY{p}{)}\PY{p}{:}
+          \PY{n}{word\PYZus{}array\PYZus{}array} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+          \PY{c+c1}{\PYZsh{} Produce one word array per message}
+          \PY{k}{for} \PY{n}{msg} \PY{o+ow}{in} \PY{n}{msg\PYZus{}array}\PY{p}{:} 
+            \PY{n}{msg\PYZus{}in\PYZus{}bytes} \PY{o}{=} \PY{n}{msg}\PY{o}{.}\PY{n}{to\PYZus{}bytes}\PY{p}{(}\PY{n}{C\PYZus{}BLOCKSIZE\PYZus{}IN\PYZus{}BYTES}\PY{p}{,}\PY{n}{byteorder}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{little}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+            \PY{n}{word\PYZus{}array\PYZus{}array}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{frombuffer}\PY{p}{(}\PY{n}{msg\PYZus{}in\PYZus{}bytes}\PY{p}{,} \PY{n}{dtype}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{uint32}\PY{p}{)}\PY{p}{)}
+          
+          \PY{c+c1}{\PYZsh{} Concatentate the small word arrays into one large}
+          \PY{n}{word\PYZus{}array} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{concatenate}\PY{p}{(}\PY{n}{word\PYZus{}array\PYZus{}array}\PY{p}{)}    
+          
+          \PY{c+c1}{\PYZsh{} Return the array of words}
+          \PY{k}{return} \PY{n}{word\PYZus{}array}
+        
+        \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{c+c1}{\PYZsh{} Function for converting an numpy array of 32\PYZhy{}bit words into messages}
+        \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{k}{def} \PY{n+nf}{word2msg}\PY{p}{(}\PY{n}{word\PYZus{}array}\PY{p}{)}\PY{p}{:}
+          \PY{n}{msg\PYZus{}array} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+        
+          \PY{c+c1}{\PYZsh{} Check that the message array size is a multiplum of 8 32 bit words}
+          \PY{n}{word\PYZus{}array\PYZus{}length} \PY{o}{=} \PY{n+nb}{len}\PY{p}{(}\PY{n}{word\PYZus{}array}\PY{p}{)}
+          \PY{k}{assert} \PY{n}{word\PYZus{}array\PYZus{}length}\PY{o}{\PYZpc{}}\PY{k}{C\PYZus{}BLOCKSIZE\PYZus{}IN\PYZus{}32\PYZus{}BIT\PYZus{}WORDS} == 0, \PYZdq{}The file size must be aligned to the block size\PYZdq{} 
+          \PY{n}{message\PYZus{}count} \PY{o}{=} \PY{n+nb}{int}\PY{p}{(}\PY{n}{word\PYZus{}array\PYZus{}length}\PY{o}{/}\PY{n}{C\PYZus{}BLOCKSIZE\PYZus{}IN\PYZus{}32\PYZus{}BIT\PYZus{}WORDS}\PY{p}{)}
+        
+          \PY{c+c1}{\PYZsh{} Loop over all messages}
+          \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{message\PYZus{}count}\PY{p}{)}\PY{p}{:}
+            
+            \PY{c+c1}{\PYZsh{} Concatinate 32\PYZhy{}bit words to a 256\PYZhy{}bit message}
+            \PY{n}{M} \PY{o}{=} \PY{l+m+mi}{0}
+            \PY{k}{for} \PY{n}{j} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{C\PYZus{}BLOCKSIZE\PYZus{}IN\PYZus{}32\PYZus{}BIT\PYZus{}WORDS}\PY{p}{)}\PY{p}{:}
+              \PY{n}{M} \PY{o}{+}\PY{o}{=} \PY{p}{(}\PY{n+nb}{int}\PY{p}{(}\PY{n}{word\PYZus{}array}\PY{p}{[}\PY{n}{i}\PY{o}{*}\PY{n}{C\PYZus{}BLOCKSIZE\PYZus{}IN\PYZus{}32\PYZus{}BIT\PYZus{}WORDS}\PY{o}{+}\PY{n}{j}\PY{p}{]}\PY{p}{)} \PY{o}{\PYZlt{}\PYZlt{}} \PY{p}{(}\PY{n}{j}\PY{o}{*}\PY{l+m+mi}{32}\PY{p}{)}\PY{p}{)}
+            
+            \PY{c+c1}{\PYZsh{} Append the message}
+            \PY{n}{msg\PYZus{}array}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{M}\PY{p}{)}
+            
+          \PY{c+c1}{\PYZsh{} Return the message array}
+          \PY{k}{return} \PY{n}{msg\PYZus{}array}
+        
+        \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{c+c1}{\PYZsh{} Function for testing msg2word word2msg conversion}
+        \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{k}{def} \PY{n+nf}{test\PYZus{}msg2msg}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+        
+          \PY{n}{ma\PYZus{}in} \PY{o}{=} \PY{p}{[}\PY{l+m+mh}{0x0000000011111111222222223333333344444444555555556666666677777777}\PY{p}{,}
+                   \PY{l+m+mh}{0x8888888899999999aaaaaaaabbbbbbbbccccccccddddddddeeeeeeeeffffffff}\PY{p}{]}
+          \PY{n}{wa} \PY{o}{=} \PY{n}{msg2word}\PY{p}{(}\PY{n}{ma\PYZus{}in}\PY{p}{)}
+          \PY{n}{ma\PYZus{}out} \PY{o}{=} \PY{n}{word2msg}\PY{p}{(}\PY{n}{wa}\PY{p}{)}
+          \PY{k}{if}\PY{p}{(}\PY{n}{ma\PYZus{}in}\PY{o}{==}\PY{n}{ma\PYZus{}out}\PY{p}{)}\PY{p}{:}
+            \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{test\PYZus{}msg2msg: PASSED}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+          \PY{k}{else}\PY{p}{:}
+            \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{test\PYZus{}msg2msg: FAILED}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+            
+        \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{c+c1}{\PYZsh{} Run a test of the utility functions}
+        \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{n}{test\PYZus{}msg2msg}\PY{p}{(}\PY{p}{)}    
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+test\_msg2msg: PASSED
+
+    \end{Verbatim}
+
+    \section{Message to encrypt/decrypt}\label{message-to-encryptdecrypt}
+
+The messages that will be encrypted/decrypted must all be downloaded
+from Blackboard and stored on the pynq platform. Copy the folder named
+"crypto" from Blackboard and paste it into the following location on the
+Pynq platform prior to running this jupyter notebook:
+
+/home/xilinx/pynq
+
+The plaintex messages satisfy the following properties: * Property1: The
+size of the file must be a multiple of the block size, i.e. the filesize
+in bytes must be dividable by 32. * Property2: C = M**e mod n, for 0
+\textless{}= M \textless{} n.
+
+The second property has been satisfied through the following: * The
+files have been generated in such a way that they contain only ASCII
+characters with a byte value equal or lower than 127. The most
+significant bit in every byte is therefore 0, and thus it is also
+guaranteed that the MSB of any 256 bit blocks will be 0. * n is selected
+in such a way that the MSB of n is always 1.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}3}]:} \PY{k+kn}{from} \PY{n+nn}{pathlib} \PY{k}{import} \PY{n}{Path}
+        
+        \PY{c+c1}{\PYZsh{} Two sets of testcases exists. One set used when the RSA algorithm is}
+        \PY{c+c1}{\PYZsh{} selected and another set for the XOR algorithm.}
+        \PY{k}{if}\PY{p}{(}\PY{n}{C\PYZus{}ENCR\PYZus{}ALGORITHM} \PY{o}{==} \PY{n}{C\PYZus{}ENCR\PYZus{}ALGORITHM\PYZus{}RSA}\PY{p}{)}\PY{p}{:}
+          \PY{n}{inp\PYZus{}msgdir} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}\PYZdq{}\PYZdq{}}\PY{l+s+s2}{/home/xilinx/pynq/crypto/rsa/inp\PYZus{}messages/}\PY{l+s+s2}{\PYZdq{}\PYZdq{}\PYZdq{}}
+          \PY{n}{otp\PYZus{}hw\PYZus{}msgdir} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}\PYZdq{}\PYZdq{}}\PY{l+s+s2}{/home/xilinx/pynq/crypto/rsa/otp\PYZus{}hw\PYZus{}messages/}\PY{l+s+s2}{\PYZdq{}\PYZdq{}\PYZdq{}}
+          \PY{n}{otp\PYZus{}sw\PYZus{}msgdir} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}\PYZdq{}\PYZdq{}}\PY{l+s+s2}{/home/xilinx/pynq/crypto/rsa/otp\PYZus{}sw\PYZus{}messages/}\PY{l+s+s2}{\PYZdq{}\PYZdq{}\PYZdq{}}    
+        \PY{k}{else}\PY{p}{:}
+          \PY{n}{inp\PYZus{}msgdir} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}\PYZdq{}\PYZdq{}}\PY{l+s+s2}{/home/xilinx/pynq/crypto/xor/inp\PYZus{}messages/}\PY{l+s+s2}{\PYZdq{}\PYZdq{}\PYZdq{}}
+          \PY{n}{otp\PYZus{}hw\PYZus{}msgdir} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}\PYZdq{}\PYZdq{}}\PY{l+s+s2}{/home/xilinx/pynq/crypto/xor/otp\PYZus{}hw\PYZus{}messages/}\PY{l+s+s2}{\PYZdq{}\PYZdq{}\PYZdq{}}
+          \PY{n}{otp\PYZus{}sw\PYZus{}msgdir} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}\PYZdq{}\PYZdq{}}\PY{l+s+s2}{/home/xilinx/pynq/crypto/xor/otp\PYZus{}sw\PYZus{}messages/}\PY{l+s+s2}{\PYZdq{}\PYZdq{}\PYZdq{}}    
+        
+        \PY{c+c1}{\PYZsh{} Name of the files to encrypt and decrypt}
+        \PY{n}{inp\PYZus{}files} \PY{o}{=} \PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{pt0\PYZus{}in.txt}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{pt1\PYZus{}in.txt}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{pt2\PYZus{}in.txt}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ct3\PYZus{}in.txt}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ct4\PYZus{}in.txt}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ct5\PYZus{}in.txt}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}
+        \PY{n}{otp\PYZus{}files} \PY{o}{=} \PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ct0\PYZus{}out.txt}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ct1\PYZus{}out.txt}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ct2\PYZus{}out.txt}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{pt3\PYZus{}out.txt}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{pt4\PYZus{}out.txt}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{pt5\PYZus{}out.txt}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}
+        \PY{n}{crypt\PYZus{}dir} \PY{o}{=} \PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ENCR}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ENCR}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ENCR}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{DECR}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{DECR}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{DECR}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}
+        
+        \PY{c+c1}{\PYZsh{} Testcase count}
+        \PY{n}{num\PYZus{}testcases} \PY{o}{=} \PY{n+nb}{len}\PY{p}{(}\PY{n}{inp\PYZus{}files}\PY{p}{)}
+        
+        \PY{c+c1}{\PYZsh{} Function for retrieving filenames for the different testcases}
+        \PY{k}{def} \PY{n+nf}{get\PYZus{}testcase}\PY{p}{(}\PY{n}{testcase\PYZus{}sel}\PY{p}{)}\PY{p}{:}
+          \PY{n}{inp\PYZus{}file}    \PY{o}{=} \PY{n}{Path}\PY{p}{(}\PY{n}{inp\PYZus{}msgdir}    \PY{o}{+} \PY{n}{inp\PYZus{}files}\PY{p}{[}\PY{n}{testcase\PYZus{}sel}\PY{p}{]}\PY{p}{)}
+          \PY{n}{otp\PYZus{}hw\PYZus{}file} \PY{o}{=} \PY{n}{Path}\PY{p}{(}\PY{n}{otp\PYZus{}hw\PYZus{}msgdir} \PY{o}{+} \PY{n}{otp\PYZus{}files}\PY{p}{[}\PY{n}{testcase\PYZus{}sel}\PY{p}{]}\PY{p}{)}
+          \PY{n}{otp\PYZus{}sw\PYZus{}file} \PY{o}{=} \PY{n}{Path}\PY{p}{(}\PY{n}{otp\PYZus{}sw\PYZus{}msgdir} \PY{o}{+} \PY{n}{otp\PYZus{}files}\PY{p}{[}\PY{n}{testcase\PYZus{}sel}\PY{p}{]}\PY{p}{)}
+          \PY{n}{direction}   \PY{o}{=} \PY{n}{crypt\PYZus{}dir}\PY{p}{[}\PY{n}{testcase\PYZus{}sel}\PY{p}{]}
+          \PY{k}{return} \PY{n}{direction}\PY{p}{,} \PY{n}{inp\PYZus{}file}\PY{p}{,} \PY{n}{otp\PYZus{}hw\PYZus{}file}\PY{p}{,} \PY{n}{otp\PYZus{}sw\PYZus{}file}
+        
+        \PY{c+c1}{\PYZsh{} Check whether or not the files exist}
+        \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{num\PYZus{}testcases}\PY{p}{)}\PY{p}{:}
+          \PY{n}{direction}\PY{p}{,} \PY{n}{inp\PYZus{}file}\PY{p}{,} \PY{n}{otp\PYZus{}hw\PYZus{}file}\PY{p}{,} \PY{n}{otp\PYZus{}sw\PYZus{}file} \PY{o}{=} \PY{n}{get\PYZus{}testcase}\PY{p}{(}\PY{n}{i}\PY{p}{)}
+          \PY{k}{if} \PY{o+ow}{not}\PY{p}{(}\PY{n}{inp\PYZus{}file}\PY{o}{.}\PY{n}{is\PYZus{}file}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+            \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{File }\PY{l+s+si}{\PYZpc{}s}\PY{l+s+s2}{ is missing. Download the file from Blackboard!}\PY{l+s+s2}{\PYZdq{}} \PY{o}{\PYZpc{}} \PY{n+nb}{str}\PY{p}{(}\PY{n}{inp\PYZus{}file}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+
+
+    \section{Keys and key generation}\label{keys-and-key-generation}
+
+Pseudocode for RSA key generation is available here:
+https://repl.it/@Snesemann/RSAKeyGenAndEncrypt
+
+When encrypting and decrypting the files in this script, the following
+keys will be used:
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}4}]:} \PY{n}{key\PYZus{}n} \PY{o}{=} \PY{l+m+mh}{0x99925173ad65686715385ea800cd28120288fc70a9bc98dd4c90d676f8ff768d}
+        \PY{n}{key\PYZus{}e} \PY{o}{=} \PY{l+m+mh}{0x0000000000000000000000000000000000000000000000000000000000010001}
+        \PY{n}{key\PYZus{}d} \PY{o}{=} \PY{l+m+mh}{0x0cea1651ef44be1f1f1476b7539bed10d73e3aac782bd9999a1e5a790932bfe9}
+\end{Verbatim}
+
+
+    \section{Software implementation of the RSA encryption
+algorithm}\label{software-implementation-of-the-rsa-encryption-algorithm}
+
+When designing digital circuits it is common to create a high level
+functional model. The following model is written at an extremely high
+level. It will produce correct results that can be used when generating
+test vectors for verification environments, but it does not provide any
+other value. It is expected that designers create more detailed models
+before attempting to write any RTL code.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}5}]:} \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{c+c1}{\PYZsh{} Function for encrypting messages}
+        \PY{c+c1}{\PYZsh{} key\PYZus{}e  : 256 bit integer representing the key e}
+        \PY{c+c1}{\PYZsh{} key\PYZus{}n  : 256 bit integer representing the key n}
+        \PY{c+c1}{\PYZsh{} M\PYZus{}array: Array of 256\PYZhy{}bit messages.}
+        \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{k}{def} \PY{n+nf}{sw\PYZus{}encrypt}\PY{p}{(}\PY{n}{key\PYZus{}e}\PY{p}{,} \PY{n}{key\PYZus{}n}\PY{p}{,} \PY{n}{M\PYZus{}array}\PY{p}{)}\PY{p}{:}
+          
+          \PY{c+c1}{\PYZsh{} Initialize the array where we will store the ciphertext}
+          \PY{n}{C\PYZus{}array} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+        
+          \PY{c+c1}{\PYZsh{} Start the timer}
+          \PY{n}{start\PYZus{}time} \PY{o}{=} \PY{n}{time}\PY{o}{.}\PY{n}{time}\PY{p}{(}\PY{p}{)}
+        
+          \PY{c+c1}{\PYZsh{} Loop over all messages}
+          \PY{k}{for} \PY{n}{M} \PY{o+ow}{in} \PY{n}{M\PYZus{}array}\PY{p}{:}
+            \PY{c+c1}{\PYZsh{} Encrypt the message by computing C = M**key\PYZus{}e mod key\PYZus{}n}
+            \PY{c+c1}{\PYZsh{} The result is a 256\PYZhy{}bit ciphertext  }
+            \PY{k}{if}\PY{p}{(}\PY{n}{C\PYZus{}ENCR\PYZus{}ALGORITHM} \PY{o}{==} \PY{n}{C\PYZus{}ENCR\PYZus{}ALGORITHM\PYZus{}RSA}\PY{p}{)}\PY{p}{:}    
+              \PY{n}{C} \PY{o}{=} \PY{n+nb}{pow}\PY{p}{(}\PY{n}{M}\PY{p}{,} \PY{n}{key\PYZus{}e}\PY{p}{,} \PY{n}{key\PYZus{}n}\PY{p}{)}
+            
+            \PY{c+c1}{\PYZsh{} Encrypt the message by computing C = M xor key\PYZus{}n    }
+            \PY{k}{else}\PY{p}{:}
+              \PY{n}{C} \PY{o}{=} \PY{n}{M} \PY{o}{\PYZca{}} \PY{n}{key\PYZus{}n}
+                
+            \PY{n}{C\PYZus{}array}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{C}\PY{p}{)}
+        
+          \PY{c+c1}{\PYZsh{} Stop the timer}
+          \PY{n}{stop\PYZus{}time} \PY{o}{=} \PY{n}{time}\PY{o}{.}\PY{n}{time}\PY{p}{(}\PY{p}{)}
+          \PY{n}{sw\PYZus{}exec\PYZus{}time} \PY{o}{=} \PY{n}{stop\PYZus{}time}\PY{o}{\PYZhy{}}\PY{n}{start\PYZus{}time}
+                
+          \PY{k}{return} \PY{n}{C\PYZus{}array}\PY{p}{,} \PY{n}{sw\PYZus{}exec\PYZus{}time}
+        
+        \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{c+c1}{\PYZsh{} Function for decrypting messages}
+        \PY{c+c1}{\PYZsh{} key\PYZus{}d  : 256 bit integer representing the key e}
+        \PY{c+c1}{\PYZsh{} key\PYZus{}n  : 256 bit integer representing the key n}
+        \PY{c+c1}{\PYZsh{} C\PYZus{}array: Array of 256\PYZhy{}bit messages.}
+        \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{k}{def} \PY{n+nf}{sw\PYZus{}decrypt}\PY{p}{(}\PY{n}{key\PYZus{}d}\PY{p}{,} \PY{n}{key\PYZus{}n}\PY{p}{,} \PY{n}{C\PYZus{}array}\PY{p}{)}\PY{p}{:}
+          \PY{c+c1}{\PYZsh{} Decryption is the same function as encryption, just with different keys}
+          \PY{k}{return} \PY{n}{sw\PYZus{}encrypt}\PY{p}{(}\PY{n}{key\PYZus{}d}\PY{p}{,} \PY{n}{key\PYZus{}n}\PY{p}{,} \PY{n}{C\PYZus{}array}\PY{p}{)}
+        
+        \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{c+c1}{\PYZsh{} Function for testing encryption and decryption in software}
+        \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{k}{def} \PY{n+nf}{test\PYZus{}sw\PYZus{}encryptdecrypt}\PY{p}{(}\PY{n}{key\PYZus{}e}\PY{p}{,} \PY{n}{key\PYZus{}d}\PY{p}{,} \PY{n}{key\PYZus{}n}\PY{p}{)}\PY{p}{:}
+          \PY{n}{M\PYZus{}arr\PYZus{}in} \PY{o}{=} \PY{p}{[}\PY{l+m+mh}{0x0000000011111111222222223333333344444444555555556666666677777777}\PY{p}{,}
+                      \PY{l+m+mh}{0x8888888899999999aaaaaaaabbbbbbbbccccccccddddddddeeeeeeeeffffffff}\PY{p}{]}
+          \PY{n}{C\PYZus{}arr}\PY{p}{,} \PY{n}{sw\PYZus{}encr\PYZus{}time} \PY{o}{=} \PY{n}{sw\PYZus{}encrypt}\PY{p}{(}\PY{n}{key\PYZus{}e}\PY{p}{,} \PY{n}{key\PYZus{}n}\PY{p}{,} \PY{n}{M\PYZus{}arr\PYZus{}in}\PY{p}{)}
+          \PY{n}{M\PYZus{}arr\PYZus{}out}\PY{p}{,} \PY{n}{sw\PYZus{}decr\PYZus{}time} \PY{o}{=} \PY{n}{sw\PYZus{}decrypt}\PY{p}{(}\PY{n}{key\PYZus{}d}\PY{p}{,} \PY{n}{key\PYZus{}n}\PY{p}{,} \PY{n}{C\PYZus{}arr}\PY{p}{)}
+          
+          \PY{k}{if}\PY{p}{(}\PY{n}{M\PYZus{}arr\PYZus{}in} \PY{o}{==} \PY{n}{M\PYZus{}arr\PYZus{}out}\PY{p}{)}\PY{p}{:}
+            \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{test\PYZus{}hw\PYZus{}encryptdecrypt: PASSED, encr\PYZus{}time: }\PY{l+s+si}{\PYZpc{}f}\PY{l+s+s2}{, decr\PYZus{}time: }\PY{l+s+si}{\PYZpc{}f}\PY{l+s+s2}{\PYZdq{}} \PY{o}{\PYZpc{}} \PY{p}{(}\PY{n}{sw\PYZus{}encr\PYZus{}time}\PY{p}{,} \PY{n}{sw\PYZus{}decr\PYZus{}time}\PY{p}{)}\PY{p}{)}    
+          \PY{k}{else}\PY{p}{:}
+            \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{test\PYZus{}sw\PYZus{}encryptdecrypt: FAILED}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}   
+          
+        \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{c+c1}{\PYZsh{} Test that the software implementation of encryption and decryption works}
+        \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{n}{test\PYZus{}sw\PYZus{}encryptdecrypt}\PY{p}{(}\PY{n}{key\PYZus{}e}\PY{p}{,} \PY{n}{key\PYZus{}d}\PY{p}{,} \PY{n}{key\PYZus{}n}\PY{p}{)}
+          
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+test\_hw\_encryptdecrypt: PASSED, encr\_time: 0.000020, decr\_time: 0.000012
+
+    \end{Verbatim}
+
+    \section{RSA encryption using an hardware
+accelerator}\label{rsa-encryption-using-an-hardware-accelerator}
+
+In the following code blocks, we test out the hardware RSA accelerator
+and measure it's performance.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}6}]:} \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{c+c1}{\PYZsh{} Loading drivers for the direct memory access block (DMA) that is responsible}
+        \PY{c+c1}{\PYZsh{} for reading the messages from memory and pushing them into the RSA design.}
+        \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{k+kn}{from} \PY{n+nn}{pynq} \PY{k}{import} \PY{n}{Overlay}
+        \PY{k+kn}{import} \PY{n+nn}{pynq}\PY{n+nn}{.}\PY{n+nn}{lib}\PY{n+nn}{.}\PY{n+nn}{dma}
+        
+        \PY{c+c1}{\PYZsh{} Load the overlay}
+        \PY{n}{overlay} \PY{o}{=} \PY{n}{Overlay}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{/home/xilinx/pynq/overlays/rsa\PYZus{}soc/rsa\PYZus{}soc.bit}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        
+        \PY{c+c1}{\PYZsh{} Load the RSA DMA}
+        \PY{n}{dma} \PY{o}{=} \PY{n}{overlay}\PY{o}{.}\PY{n}{rsa}\PY{o}{.}\PY{n}{rsa\PYZus{}dma}
+        
+        \PY{c+c1}{\PYZsh{} Load the MMIO driver for the RSA accelerator}
+        \PY{n}{rsammio} \PY{o}{=} \PY{n}{overlay}\PY{o}{.}\PY{n}{rsa}\PY{o}{.}\PY{n}{rsa\PYZus{}acc}\PY{o}{.}\PY{n}{mmio}
+\end{Verbatim}
+
+
+    
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}7}]:} \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{c+c1}{\PYZsh{} Function for writing C\PYZus{}BLOCKSIZE\PYZus{}IN\PYZus{}32\PYZus{}BIT\PYZus{}WORDS consequtive registers}
+        \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{k}{def} \PY{n+nf}{write\PYZus{}blockreg}\PY{p}{(}\PY{n}{address}\PY{p}{,} \PY{n}{block}\PY{p}{)}\PY{p}{:}
+          \PY{n}{reg\PYZus{}data} \PY{o}{=} \PY{n}{msg2word}\PY{p}{(}\PY{p}{[}\PY{n}{block}\PY{p}{]}\PY{p}{)}
+          \PY{n}{addr} \PY{o}{=} \PY{n}{address}
+          \PY{c+c1}{\PYZsh{} Each register contains 4 bytes. The registers are byte addressed.}
+          \PY{k}{for} \PY{n}{data} \PY{o+ow}{in} \PY{n}{reg\PYZus{}data}\PY{p}{:}
+            \PY{n}{rsammio}\PY{o}{.}\PY{n}{write}\PY{p}{(}\PY{n}{addr}\PY{p}{,} \PY{n+nb}{int}\PY{p}{(}\PY{n}{data}\PY{p}{)}\PY{p}{)}
+            \PY{n}{addr} \PY{o}{+}\PY{o}{=} \PY{l+m+mi}{4}
+        
+        \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{c+c1}{\PYZsh{} Function for reading C\PYZus{}BLOCKSIZE\PYZus{}IN\PYZus{}32\PYZus{}BIT\PYZus{}WORDS consequtive registers}
+        \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{k}{def} \PY{n+nf}{read\PYZus{}blockreg}\PY{p}{(}\PY{n}{address}\PY{p}{)}\PY{p}{:}
+          \PY{n}{addr} \PY{o}{=} \PY{n}{address}
+          \PY{n}{reg\PYZus{}arr} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+          \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{C\PYZus{}BLOCKSIZE\PYZus{}IN\PYZus{}32\PYZus{}BIT\PYZus{}WORDS}\PY{p}{)}\PY{p}{:}
+            \PY{n}{reg\PYZus{}arr}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{rsammio}\PY{o}{.}\PY{n}{read}\PY{p}{(}\PY{n}{addr}\PY{p}{)}\PY{p}{)}
+            \PY{n}{addr} \PY{o}{+}\PY{o}{=} \PY{l+m+mi}{4}
+          \PY{n}{reg\PYZus{}data} \PY{o}{=} \PY{n}{word2msg}\PY{p}{(}\PY{n}{reg\PYZus{}arr}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+          \PY{k}{return} \PY{n}{reg\PYZus{}data}
+            
+        \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{c+c1}{\PYZsh{} Function for writing keys to the RSA accelerator}
+        \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{k}{def} \PY{n+nf}{write\PYZus{}keys}\PY{p}{(}\PY{n}{key\PYZus{}n}\PY{p}{,} \PY{n}{key\PYZus{}e\PYZus{}or\PYZus{}d}\PY{p}{)}\PY{p}{:}
+          \PY{c+c1}{\PYZsh{} Store N and E}
+          \PY{n}{write\PYZus{}blockreg}\PY{p}{(}\PY{l+m+mh}{0x00}\PY{p}{,} \PY{n}{key\PYZus{}n}\PY{p}{)}
+          \PY{n}{write\PYZus{}blockreg}\PY{p}{(}\PY{l+m+mh}{0x20}\PY{p}{,} \PY{n}{key\PYZus{}e\PYZus{}or\PYZus{}d}\PY{p}{)}
+        
+        \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{c+c1}{\PYZsh{} Function for reading keys from the RSA accelerator}
+        \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{k}{def} \PY{n+nf}{read\PYZus{}keys}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+          \PY{c+c1}{\PYZsh{} Read N, E}
+          \PY{n}{n} \PY{o}{=} \PY{n}{read\PYZus{}blockreg}\PY{p}{(}\PY{l+m+mh}{0x00}\PY{p}{)}
+          \PY{n}{e\PYZus{}or\PYZus{}d} \PY{o}{=} \PY{n}{read\PYZus{}blockreg}\PY{p}{(}\PY{l+m+mh}{0x20}\PY{p}{)}
+          \PY{k}{return} \PY{n}{n}\PY{p}{,} \PY{n}{e\PYZus{}or\PYZus{}d}
+        
+        \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{c+c1}{\PYZsh{} Write the keys and read them back. Compare the result}
+        \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{k}{def} \PY{n+nf}{test\PYZus{}write\PYZus{}read\PYZus{}keys}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+          \PY{n}{write\PYZus{}keys}\PY{p}{(}\PY{n}{key\PYZus{}n}\PY{p}{,} \PY{n}{key\PYZus{}e}\PY{p}{)}
+          \PY{n}{n}\PY{p}{,} \PY{n}{e} \PY{o}{=} \PY{n}{read\PYZus{}keys}\PY{p}{(}\PY{p}{)}
+          \PY{k}{if}\PY{p}{(}\PY{p}{(}\PY{n}{key\PYZus{}n} \PY{o}{==} \PY{n}{n}\PY{p}{)} \PY{o+ow}{and} \PY{p}{(}\PY{n}{key\PYZus{}e} \PY{o}{==} \PY{n}{e}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+            \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{test\PYZus{}write\PYZus{}read\PYZus{}keys: PASSED}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+          \PY{k}{else}\PY{p}{:}
+            \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{test\PYZus{}write\PYZus{}read\PYZus{}keys: FAILED}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+        
+        \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{c+c1}{\PYZsh{} Test writing keys to the accelerator and reading back the keys}
+        \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{n}{test\PYZus{}write\PYZus{}read\PYZus{}keys}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+test\_write\_read\_keys: PASSED
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}8}]:} \PY{k+kn}{from} \PY{n+nn}{pynq} \PY{k}{import} \PY{n}{Xlnk}
+        \PY{k+kn}{import} \PY{n+nn}{random}
+        \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+        
+        \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{c+c1}{\PYZsh{} Function that computes C = M**e mode n }
+        \PY{c+c1}{\PYZsh{} key\PYZus{}e  : 256 bit integer representing the key e}
+        \PY{c+c1}{\PYZsh{} key\PYZus{}n  : 256 bit integer representing the key n}
+        \PY{c+c1}{\PYZsh{} M\PYZus{}array: Array 256\PYZhy{}bit blocks.}
+        \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{k}{def} \PY{n+nf}{hw\PYZus{}encrypt}\PY{p}{(}\PY{n}{key\PYZus{}e}\PY{p}{,} \PY{n}{key\PYZus{}n}\PY{p}{,} \PY{n}{M\PYZus{}array}\PY{p}{)}\PY{p}{:}
+        
+          \PY{c+c1}{\PYZsh{} Write the keys}
+          \PY{n}{write\PYZus{}keys}\PY{p}{(}\PY{n}{key\PYZus{}n}\PY{p}{,} \PY{n}{key\PYZus{}e}\PY{p}{)}
+                    
+          \PY{c+c1}{\PYZsh{} Allocate buffers for the input and output signals. }
+          \PY{n}{M\PYZus{}word\PYZus{}array} \PY{o}{=} \PY{n}{msg2word}\PY{p}{(}\PY{n}{M\PYZus{}array}\PY{p}{)}
+          \PY{n}{xlnk} \PY{o}{=} \PY{n}{Xlnk}\PY{p}{(}\PY{p}{)}
+          \PY{n}{buffer\PYZus{}size\PYZus{}in\PYZus{}words} \PY{o}{=} \PY{n+nb}{len}\PY{p}{(}\PY{n}{M\PYZus{}word\PYZus{}array}\PY{p}{)}    
+          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Buffer size:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{buffer\PYZus{}size\PYZus{}in\PYZus{}words}\PY{p}{)}
+        
+          \PY{c+c1}{\PYZsh{} The size of the files must be aligned to the block size of 256 bit = 8*32 bit words}
+          \PY{k}{assert} \PY{n}{buffer\PYZus{}size\PYZus{}in\PYZus{}words}\PY{o}{\PYZpc{}}\PY{k}{C\PYZus{}BLOCKSIZE\PYZus{}IN\PYZus{}32\PYZus{}BIT\PYZus{}WORDS} == 0, \PYZdq{}The file size must be aligned to the block size of 256 bit\PYZdq{} 
+            
+          \PY{n}{in\PYZus{}buffer}  \PY{o}{=} \PY{n}{xlnk}\PY{o}{.}\PY{n}{cma\PYZus{}array}\PY{p}{(}\PY{n}{shape}\PY{o}{=}\PY{p}{(}\PY{n}{buffer\PYZus{}size\PYZus{}in\PYZus{}words}\PY{p}{,}\PY{p}{)}\PY{p}{,} \PY{n}{dtype}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{uint32}\PY{p}{)}
+          \PY{n}{out\PYZus{}buffer} \PY{o}{=} \PY{n}{xlnk}\PY{o}{.}\PY{n}{cma\PYZus{}array}\PY{p}{(}\PY{n}{shape}\PY{o}{=}\PY{p}{(}\PY{n}{buffer\PYZus{}size\PYZus{}in\PYZus{}words}\PY{p}{,}\PY{p}{)}\PY{p}{,} \PY{n}{dtype}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{uint32}\PY{p}{)}
+        
+          \PY{c+c1}{\PYZsh{} Copy the samples to the in\PYZus{}buffer}
+          \PY{n}{np}\PY{o}{.}\PY{n}{copyto}\PY{p}{(}\PY{n}{in\PYZus{}buffer}\PY{p}{,} \PY{n}{M\PYZus{}word\PYZus{}array}\PY{p}{)}
+        
+          \PY{c+c1}{\PYZsh{} Trigger the DMA transfer and wait for the result}
+          \PY{c+c1}{\PYZsh{} Waiting for completeness is done trough polling of registers. Measurements of}
+          \PY{c+c1}{\PYZsh{} consumed time will be more accurate with the use of interrupts.}
+          \PY{n}{start\PYZus{}time} \PY{o}{=} \PY{n}{time}\PY{o}{.}\PY{n}{time}\PY{p}{(}\PY{p}{)}
+          \PY{n}{dma}\PY{o}{.}\PY{n}{sendchannel}\PY{o}{.}\PY{n}{transfer}\PY{p}{(}\PY{n}{in\PYZus{}buffer}\PY{p}{)}
+          \PY{n}{dma}\PY{o}{.}\PY{n}{recvchannel}\PY{o}{.}\PY{n}{transfer}\PY{p}{(}\PY{n}{out\PYZus{}buffer}\PY{p}{)}
+          \PY{c+c1}{\PYZsh{}print(\PYZdq{}DMA.sendchannel complete\PYZdq{})}
+          \PY{c+c1}{\PYZsh{}dma.sendchannel.wait()}
+            
+          \PY{c+c1}{\PYZsh{}print(\PYZdq{}DMA.recvchannel complete\PYZdq{}) }
+          \PY{c+c1}{\PYZsh{} Should be sufficient to wait for the recieve channel to complete. This }
+          \PY{c+c1}{\PYZsh{} will reduce some of the polling overhead when running tests.}
+          \PY{n}{dma}\PY{o}{.}\PY{n}{recvchannel}\PY{o}{.}\PY{n}{wait}\PY{p}{(}\PY{p}{)}
+          \PY{n}{stop\PYZus{}time} \PY{o}{=} \PY{n}{time}\PY{o}{.}\PY{n}{time}\PY{p}{(}\PY{p}{)}
+          \PY{n}{hw\PYZus{}exec\PYZus{}time} \PY{o}{=} \PY{n}{stop\PYZus{}time}\PY{o}{\PYZhy{}}\PY{n}{start\PYZus{}time}
+        
+          \PY{c+c1}{\PYZsh{} Copy the result  }
+          \PY{n}{C\PYZus{}word\PYZus{}array} \PY{o}{=} \PY{n}{out\PYZus{}buffer}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{p}{)}
+          \PY{n}{C\PYZus{}array} \PY{o}{=} \PY{n}{word2msg}\PY{p}{(}\PY{n}{C\PYZus{}word\PYZus{}array}\PY{p}{)}
+          
+          \PY{c+c1}{\PYZsh{} Free the buffers}
+          \PY{n}{in\PYZus{}buffer}\PY{o}{.}\PY{n}{close}\PY{p}{(}\PY{p}{)}
+          \PY{n}{out\PYZus{}buffer}\PY{o}{.}\PY{n}{close}\PY{p}{(}\PY{p}{)}
+        
+          \PY{c+c1}{\PYZsh{} Return the result}
+          \PY{k}{return} \PY{n}{C\PYZus{}array}\PY{p}{,} \PY{n}{hw\PYZus{}exec\PYZus{}time}
+        
+        \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{c+c1}{\PYZsh{} Function that computes M = C**d mode n}
+        \PY{c+c1}{\PYZsh{}}
+        \PY{c+c1}{\PYZsh{} Encryption and decryption is the same operation. Thus the hw\PYZus{}decrypt function}
+        \PY{c+c1}{\PYZsh{} is redundant.}
+        \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{k}{def} \PY{n+nf}{hw\PYZus{}decrypt}\PY{p}{(}\PY{n}{key\PYZus{}d}\PY{p}{,} \PY{n}{key\PYZus{}n}\PY{p}{,} \PY{n}{C\PYZus{}array}\PY{p}{)}\PY{p}{:}
+          \PY{k}{return} \PY{n}{hw\PYZus{}encrypt}\PY{p}{(}\PY{n}{key\PYZus{}d}\PY{p}{,} \PY{n}{key\PYZus{}n}\PY{p}{,} \PY{n}{C\PYZus{}array}\PY{p}{)}
+        
+        \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{c+c1}{\PYZsh{} Function for testing encryption and decryption in hardware}
+        \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{k}{def} \PY{n+nf}{test\PYZus{}hw\PYZus{}encryptdecrypt}\PY{p}{(}\PY{n}{key\PYZus{}e}\PY{p}{,} \PY{n}{key\PYZus{}d}\PY{p}{,} \PY{n}{key\PYZus{}n}\PY{p}{)}\PY{p}{:}
+          \PY{n}{M\PYZus{}arr\PYZus{}in} \PY{o}{=} \PY{p}{[}\PY{l+m+mh}{0x0000000011111111222222223333333344444444555555556666666677777777}\PY{p}{,}
+                      \PY{l+m+mh}{0x8888888899999999aaaaaaaabbbbbbbbccccccccddddddddeeeeeeeeffffffff}\PY{p}{]}
+          \PY{n}{C\PYZus{}arr}\PY{p}{,} \PY{n}{hw\PYZus{}encr\PYZus{}time} \PY{o}{=} \PY{n}{hw\PYZus{}encrypt}\PY{p}{(}\PY{n}{key\PYZus{}e}\PY{p}{,} \PY{n}{key\PYZus{}n}\PY{p}{,} \PY{n}{M\PYZus{}arr\PYZus{}in}\PY{p}{)}
+          \PY{n}{M\PYZus{}arr\PYZus{}out}\PY{p}{,} \PY{n}{hw\PYZus{}decr\PYZus{}time} \PY{o}{=} \PY{n}{hw\PYZus{}decrypt}\PY{p}{(}\PY{n}{key\PYZus{}d}\PY{p}{,} \PY{n}{key\PYZus{}n}\PY{p}{,} \PY{n}{C\PYZus{}arr}\PY{p}{)}
+          
+          \PY{k}{if}\PY{p}{(}\PY{n}{M\PYZus{}arr\PYZus{}in} \PY{o}{==} \PY{n}{M\PYZus{}arr\PYZus{}out}\PY{p}{)}\PY{p}{:}
+            \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{test\PYZus{}hw\PYZus{}encryptdecrypt: PASSED, encr\PYZus{}time: }\PY{l+s+si}{\PYZpc{}f}\PY{l+s+s2}{, decr\PYZus{}time: }\PY{l+s+si}{\PYZpc{}f}\PY{l+s+s2}{\PYZdq{}} \PY{o}{\PYZpc{}} \PY{p}{(}\PY{n}{hw\PYZus{}encr\PYZus{}time}\PY{p}{,} \PY{n}{hw\PYZus{}decr\PYZus{}time}\PY{p}{)}\PY{p}{)}
+          \PY{k}{else}\PY{p}{:}
+            \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{test\PYZus{}hw\PYZus{}encryptdecrypt: FAILED}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+            \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{M\PYZus{}arr\PYZus{}in: }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n+nb}{hex}\PY{p}{(}\PY{n}{M\PYZus{}arr\PYZus{}in}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{)}   
+            \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{C\PYZus{}arr: }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n+nb}{hex}\PY{p}{(}\PY{n}{C\PYZus{}arr}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{)}             
+            \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{M\PYZus{}arr\PYZus{}out: }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n+nb}{hex}\PY{p}{(}\PY{n}{M\PYZus{}arr\PYZus{}out}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{)}                       
+          
+        \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{c+c1}{\PYZsh{} Test that the hardware implementation of encryption and decryption works}
+        \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{n}{test\PYZus{}hw\PYZus{}encryptdecrypt}\PY{p}{(}\PY{n}{key\PYZus{}e}\PY{p}{,} \PY{n}{key\PYZus{}d}\PY{p}{,} \PY{n}{key\PYZus{}n}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Buffer size: 16
+Buffer size: 16
+test\_hw\_encryptdecrypt: PASSED, encr\_time: 0.000389, decr\_time: 0.002695
+
+    \end{Verbatim}
+
+    \section{Encrypt and decrypt long messages in hardware and
+software}\label{encrypt-and-decrypt-long-messages-in-hardware-and-software}
+
+Results from encrypting and decrypting files in hardware and software.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}9}]:} \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{c+c1}{\PYZsh{} Loop over all files encrypt/decrypt and store the results.}
+        \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{n}{hw\PYZus{}runtime} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+        \PY{n}{sw\PYZus{}runtime} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+        
+        \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{num\PYZus{}testcases}\PY{p}{)}\PY{p}{:}
+          \PY{n}{direction}\PY{p}{,} \PY{n}{inp\PYZus{}file}\PY{p}{,} \PY{n}{otp\PYZus{}hw\PYZus{}file}\PY{p}{,} \PY{n}{otp\PYZus{}sw\PYZus{}file} \PY{o}{=} \PY{n}{get\PYZus{}testcase}\PY{p}{(}\PY{n}{i}\PY{p}{)}
+          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{*}\PY{l+s+s2}{\PYZdq{}}\PY{o}{*}\PY{l+m+mi}{80}\PY{p}{)}
+          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{CRYPT DIR       : }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{direction}\PY{p}{)}
+          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{INPUT FILE      : }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{inp\PYZus{}file}\PY{p}{)}
+          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{OUTPUT FILE (HW): }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{otp\PYZus{}hw\PYZus{}file}\PY{p}{)}
+          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{OUTPUT FILE (SW): }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{otp\PYZus{}sw\PYZus{}file}\PY{p}{)}
+          \PY{k}{if}\PY{p}{(}\PY{n}{C\PYZus{}ENCR\PYZus{}ALGORITHM} \PY{o}{==} \PY{n}{C\PYZus{}ENCR\PYZus{}ALGORITHM\PYZus{}RSA}\PY{p}{)}\PY{p}{:}
+            \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ENCR ALGORITHM  : RSA}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+          \PY{k}{else}\PY{p}{:} 
+            \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ENCR ALGORITHM  : XOR}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}    
+          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{*}\PY{l+s+s2}{\PYZdq{}}\PY{o}{*}\PY{l+m+mi}{80}\PY{p}{)}
+          \PY{n}{input\PYZus{}msg\PYZus{}data}                   \PY{o}{=} \PY{n}{word2msg}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{fromfile}\PY{p}{(}\PY{n+nb}{str}\PY{p}{(}\PY{n}{inp\PYZus{}file}\PY{p}{)}\PY{p}{,}\PY{n}{dtype}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{uint32}\PY{p}{)}\PY{p}{)}
+          \PY{k}{if}\PY{p}{(}\PY{n}{direction} \PY{o}{==} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ENCR}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{:}
+            \PY{n}{output\PYZus{}msg\PYZus{}hw\PYZus{}data}\PY{p}{,} \PY{n}{hw\PYZus{}exec\PYZus{}time} \PY{o}{=} \PY{n}{hw\PYZus{}encrypt}\PY{p}{(}\PY{n}{key\PYZus{}e}\PY{p}{,} \PY{n}{key\PYZus{}n}\PY{p}{,} \PY{n}{input\PYZus{}msg\PYZus{}data}\PY{p}{)}
+            \PY{n}{hw\PYZus{}runtime}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{hw\PYZus{}exec\PYZus{}time}\PY{p}{)}
+            \PY{n}{output\PYZus{}msg\PYZus{}sw\PYZus{}data}\PY{p}{,} \PY{n}{sw\PYZus{}exec\PYZus{}time} \PY{o}{=} \PY{n}{sw\PYZus{}encrypt}\PY{p}{(}\PY{n}{key\PYZus{}e}\PY{p}{,} \PY{n}{key\PYZus{}n}\PY{p}{,} \PY{n}{input\PYZus{}msg\PYZus{}data}\PY{p}{)}
+            \PY{n}{sw\PYZus{}runtime}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{sw\PYZus{}exec\PYZus{}time}\PY{p}{)}
+            \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{HW RUNTIME: }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{hw\PYZus{}exec\PYZus{}time}\PY{p}{)}    
+            \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{SW RUNTIME: }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{sw\PYZus{}exec\PYZus{}time}\PY{p}{)}    
+          \PY{k}{elif}\PY{p}{(}\PY{n}{direction} \PY{o}{==} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{DECR}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{:}
+            \PY{n}{output\PYZus{}msg\PYZus{}hw\PYZus{}data}\PY{p}{,} \PY{n}{hw\PYZus{}exec\PYZus{}time} \PY{o}{=} \PY{n}{hw\PYZus{}decrypt}\PY{p}{(}\PY{n}{key\PYZus{}d}\PY{p}{,} \PY{n}{key\PYZus{}n}\PY{p}{,} \PY{n}{input\PYZus{}msg\PYZus{}data}\PY{p}{)}
+            \PY{n}{hw\PYZus{}runtime}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{hw\PYZus{}exec\PYZus{}time}\PY{p}{)}
+            \PY{n}{output\PYZus{}msg\PYZus{}sw\PYZus{}data}\PY{p}{,} \PY{n}{sw\PYZus{}exec\PYZus{}time} \PY{o}{=} \PY{n}{sw\PYZus{}decrypt}\PY{p}{(}\PY{n}{key\PYZus{}d}\PY{p}{,} \PY{n}{key\PYZus{}n}\PY{p}{,} \PY{n}{input\PYZus{}msg\PYZus{}data}\PY{p}{)}
+            \PY{n}{sw\PYZus{}runtime}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{sw\PYZus{}exec\PYZus{}time}\PY{p}{)}
+            \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{HW RUNTIME: }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{hw\PYZus{}exec\PYZus{}time}\PY{p}{)}    
+            \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{SW RUNTIME: }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{sw\PYZus{}exec\PYZus{}time}\PY{p}{)}    
+            
+          \PY{c+c1}{\PYZsh{} Compare results}
+          \PY{k}{if}\PY{p}{(}\PY{n}{output\PYZus{}msg\PYZus{}sw\PYZus{}data} \PY{o}{==} \PY{n}{output\PYZus{}msg\PYZus{}hw\PYZus{}data}\PY{p}{)}\PY{p}{:}
+            \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{HW and SW produced the same result: TEST PASSED}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+          \PY{k}{else}\PY{p}{:}
+            \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{HW and SW output did not match: TEST FAILED}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+          \PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
+        
+          \PY{c+c1}{\PYZsh{} Write the results to file}
+          \PY{n}{msg2word}\PY{p}{(}\PY{n}{output\PYZus{}msg\PYZus{}hw\PYZus{}data}\PY{p}{)}\PY{o}{.}\PY{n}{tofile}\PY{p}{(}\PY{n+nb}{str}\PY{p}{(}\PY{n}{otp\PYZus{}hw\PYZus{}file}\PY{p}{)}\PY{p}{)}
+          \PY{n}{msg2word}\PY{p}{(}\PY{n}{output\PYZus{}msg\PYZus{}sw\PYZus{}data}\PY{p}{)}\PY{o}{.}\PY{n}{tofile}\PY{p}{(}\PY{n+nb}{str}\PY{p}{(}\PY{n}{otp\PYZus{}sw\PYZus{}file}\PY{p}{)}\PY{p}{)}    
+            
+            
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+********************************************************************************
+CRYPT DIR       :  ENCR
+INPUT FILE      :  /home/xilinx/pynq/crypto/xor/inp\_messages/pt0\_in.txt
+OUTPUT FILE (HW):  /home/xilinx/pynq/crypto/xor/otp\_hw\_messages/ct0\_out.txt
+OUTPUT FILE (SW):  /home/xilinx/pynq/crypto/xor/otp\_sw\_messages/ct0\_out.txt
+ENCR ALGORITHM  : XOR
+********************************************************************************
+Buffer size: 504
+HW RUNTIME:  0.0018541812896728516
+SW RUNTIME:  0.00017976760864257812
+HW and SW produced the same result: TEST PASSED
+
+********************************************************************************
+CRYPT DIR       :  ENCR
+INPUT FILE      :  /home/xilinx/pynq/crypto/xor/inp\_messages/pt1\_in.txt
+OUTPUT FILE (HW):  /home/xilinx/pynq/crypto/xor/otp\_hw\_messages/ct1\_out.txt
+OUTPUT FILE (SW):  /home/xilinx/pynq/crypto/xor/otp\_sw\_messages/ct1\_out.txt
+ENCR ALGORITHM  : XOR
+********************************************************************************
+Buffer size: 7056
+HW RUNTIME:  0.0011360645294189453
+SW RUNTIME:  0.0028145313262939453
+HW and SW produced the same result: TEST PASSED
+
+********************************************************************************
+CRYPT DIR       :  ENCR
+INPUT FILE      :  /home/xilinx/pynq/crypto/xor/inp\_messages/pt2\_in.txt
+OUTPUT FILE (HW):  /home/xilinx/pynq/crypto/xor/otp\_hw\_messages/ct2\_out.txt
+OUTPUT FILE (SW):  /home/xilinx/pynq/crypto/xor/otp\_sw\_messages/ct2\_out.txt
+ENCR ALGORITHM  : XOR
+********************************************************************************
+Buffer size: 144
+HW RUNTIME:  0.0015401840209960938
+SW RUNTIME:  6.318092346191406e-05
+HW and SW produced the same result: TEST PASSED
+
+********************************************************************************
+CRYPT DIR       :  DECR
+INPUT FILE      :  /home/xilinx/pynq/crypto/xor/inp\_messages/ct3\_in.txt
+OUTPUT FILE (HW):  /home/xilinx/pynq/crypto/xor/otp\_hw\_messages/pt3\_out.txt
+OUTPUT FILE (SW):  /home/xilinx/pynq/crypto/xor/otp\_sw\_messages/pt3\_out.txt
+ENCR ALGORITHM  : XOR
+********************************************************************************
+Buffer size: 504
+HW RUNTIME:  0.0024080276489257812
+SW RUNTIME:  0.00018835067749023438
+HW and SW produced the same result: TEST PASSED
+
+********************************************************************************
+CRYPT DIR       :  DECR
+INPUT FILE      :  /home/xilinx/pynq/crypto/xor/inp\_messages/ct4\_in.txt
+OUTPUT FILE (HW):  /home/xilinx/pynq/crypto/xor/otp\_hw\_messages/pt4\_out.txt
+OUTPUT FILE (SW):  /home/xilinx/pynq/crypto/xor/otp\_sw\_messages/pt4\_out.txt
+ENCR ALGORITHM  : XOR
+********************************************************************************
+Buffer size: 7056
+HW RUNTIME:  0.0007059574127197266
+SW RUNTIME:  0.002298593521118164
+HW and SW produced the same result: TEST PASSED
+
+********************************************************************************
+CRYPT DIR       :  DECR
+INPUT FILE      :  /home/xilinx/pynq/crypto/xor/inp\_messages/ct5\_in.txt
+OUTPUT FILE (HW):  /home/xilinx/pynq/crypto/xor/otp\_hw\_messages/pt5\_out.txt
+OUTPUT FILE (SW):  /home/xilinx/pynq/crypto/xor/otp\_sw\_messages/pt5\_out.txt
+ENCR ALGORITHM  : XOR
+********************************************************************************
+Buffer size: 144
+HW RUNTIME:  0.0009644031524658203
+SW RUNTIME:  6.556510925292969e-05
+HW and SW produced the same result: TEST PASSED
+
+
+    \end{Verbatim}
+
+    \section{Plot results}\label{plot-results}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}10}]:} \PY{o}{\PYZpc{}}\PY{k}{matplotlib} notebook
+         \PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
+         
+         \PY{k}{if}\PY{p}{(}\PY{n}{C\PYZus{}ENCR\PYZus{}ALGORITHM} \PY{o}{==} \PY{n}{C\PYZus{}ENCR\PYZus{}ALGORITHM\PYZus{}RSA}\PY{p}{)}\PY{p}{:}
+           \PY{n}{ALGORITHM} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{RSA}\PY{l+s+s2}{\PYZdq{}}
+         \PY{k}{else}\PY{p}{:} 
+           \PY{n}{ALGORITHM} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{XOR}\PY{l+s+s2}{\PYZdq{}}
+             
+         \PY{n}{runtime\PYZus{}plot} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{p}{)}
+         \PY{n}{ax} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplot}\PY{p}{(}\PY{l+m+mi}{111}\PY{p}{)}
+         \PY{n}{hw\PYZus{}testcases} \PY{o}{=} \PY{p}{[}\PY{n}{i}\PY{o}{\PYZhy{}}\PY{l+m+mf}{0.1} \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range} \PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{inp\PYZus{}files}\PY{p}{)}\PY{p}{)}\PY{p}{]}
+         \PY{n}{sw\PYZus{}testcases} \PY{o}{=} \PY{p}{[}\PY{n}{i}\PY{o}{+}\PY{l+m+mf}{0.1} \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range} \PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{inp\PYZus{}files}\PY{p}{)}\PY{p}{)}\PY{p}{]}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Time (sec)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Testcase}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{ax}\PY{o}{.}\PY{n}{bar}\PY{p}{(}\PY{n}{hw\PYZus{}testcases}\PY{p}{,} \PY{n}{hw\PYZus{}runtime}\PY{p}{,}\PY{n}{width}\PY{o}{=}\PY{l+m+mf}{0.2}\PY{p}{,}\PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{b}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{align}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{center}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{HW }\PY{l+s+si}{\PYZpc{}s}\PY{l+s+s1}{ RUNTIME}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}} \PY{n}{ALGORITHM}\PY{p}{)}
+         \PY{n}{ax}\PY{o}{.}\PY{n}{bar}\PY{p}{(}\PY{n}{sw\PYZus{}testcases}\PY{p}{,} \PY{n}{sw\PYZus{}runtime}\PY{p}{,}\PY{n}{width}\PY{o}{=}\PY{l+m+mf}{0.2}\PY{p}{,}\PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{align}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{center}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SW }\PY{l+s+si}{\PYZpc{}s}\PY{l+s+s1}{ RUNTIME}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}} \PY{n}{ALGORITHM}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+
+    
+    \begin{verbatim}
+<IPython.core.display.Javascript object>
+    \end{verbatim}
+
+    
+    
+    \begin{verbatim}
+<IPython.core.display.HTML object>
+    \end{verbatim}
+
+    
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}10}]:} <matplotlib.legend.Legend at 0xaee260d0>
+\end{Verbatim}
+            
+    \section{Discussion of results}\label{discussion-of-results}
+
+\subsection{Discussion of XOR results}\label{discussion-of-xor-results}
+
+The overhead for running the HW encryption is relatively large. For
+small tests, such as 0,2,3 and 5, the performance of the HW solution is
+low compared to the SW solution. For the HW polling of registers is used
+for detecting when the encryption/decryption is completed. An
+improvement that will reduce the overhead is to implement support for
+interrupts.
+
+Tests 1 and 4 are longer and here the HW is clearly faster than the SW
+solution since the overhead is no longer dominating the runtime of the
+HW.
+
+\subsection{Discussion of RSA results}\label{discussion-of-rsa-results}
+
+RSA is a much more demainding algorithm and should run slowly in
+software for most tests compared to the HW.
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+    \end{document}
