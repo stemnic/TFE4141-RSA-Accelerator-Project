@@ -82,9 +82,11 @@ begin
 			result    => msgout_data ,
 			modulus   => key_n       ,
 			clk       => clk         ,
-			reset_n   => reset_n
+			reset_n   => reset_n     ,
+			msgin_last => msgin_last	 ,
+			msgout_last => msgout_last
 		);
 
-	msgout_last  <= msgin_last;
+--	msgout_last  <= msgin_last;
 	rsa_status   <= (others => '0');
 end rtl;

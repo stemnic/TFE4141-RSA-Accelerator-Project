@@ -16,10 +16,13 @@ entity exponentiation is
 		--input data
 		message 	: in STD_LOGIC_VECTOR ( C_block_size-1 downto 0 );
 		key 		: in STD_LOGIC_VECTOR ( C_block_size-1 downto 0 );
+		msgin_last : in std_logic; 
 
 		--ouput controll
 		ready_out	: in STD_LOGIC;
 		valid_out	: out STD_LOGIC;
+        msgout_last : out std_logic; -- Core
+
 
 		--output data
 		result 		: out STD_LOGIC_VECTOR(C_block_size-1 downto 0);
@@ -72,7 +75,7 @@ begin
 IF (reset_n = '0') then
 	result <= (others => '0');
 	index := C_block_size-1;
-	ready_in <= '0';
+	ready_in <= '1';
 	valid_out <= '0';
 	State <= idle;
 ELSE
@@ -82,10 +85,9 @@ ELSE
 	when idle =>
         C <= (others => '0');
         M_reg <= (others => '0');
-        ready_in <= '0';
-
+        ready_in <= '1';
 		IF (valid_in = '1') and falling_edge(clk) THEN
-		    result <= (others => '0');
+		    --result <= (others => '0');
 		    valid_out <= '0';
 			index := 255;
 			K_reg <= key;
@@ -97,6 +99,7 @@ ELSE
 	   END IF;
 
 	when find_first_bit =>
+        ready_in <= '0';
 		if K_reg(index) = '1' then
 			State <= first_exponentiate;
 		else
@@ -146,7 +149,6 @@ ELSE
         valid_out <= '1';
         result <= C;
 		if ready_out = '1' then
-		    ready_in <= '1';
 			State <= idle;
 		end if;
 
