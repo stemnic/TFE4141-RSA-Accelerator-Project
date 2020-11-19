@@ -3,7 +3,7 @@ use ieee.std_logic_1164.all;
 -- use ieee.std_logic_arith.all; 
 use ieee.std_logic_unsigned.all;
 use ieee.numeric_std.all;
-
+use work.blakley;
 entity exponentiation is
 	generic (
 		C_block_size : integer := 256
@@ -40,7 +40,9 @@ end exponentiation;
 architecture expBehave of exponentiation is -- Using LR_binary
 	signal d_index          : std_logic_vector(9 downto 0); -- For debugging
 	TYPE State_type IS (idle, first_exponentiate, second_exponentiate, find_first_bit, done, chill);  -- Define the states
-	SIGNAL State            : State_Type; 
+	SIGNAL state            : State_Type; 
+	SIGNAL nxt_state        : State_Type; 
+
 	signal C                : STD_LOGIC_VECTOR(C_block_size-1 downto 0);
     signal M 		        : STD_LOGIC_VECTOR ( C_block_size-1 downto 0 );
 	shared variable index   : integer range -1 to 256; 
@@ -48,7 +50,10 @@ architecture expBehave of exponentiation is -- Using LR_binary
     signal M_reg : STD_LOGIC_VECTOR ( C_block_size-1 downto 0 );
     signal K_reg : STD_LOGIC_VECTOR ( C_block_size-1 downto 0 );
 
-    
+    signal ready_in_reg     :  STD_LOGIC;
+    signal valid_out_reg	: STD_LOGIC;
+    signal msgout_last_reg	: STD_LOGIC;
+    signal result_reg	: STD_LOGIC_VECTOR(C_block_size-1 downto 0);
 	shared variable started : integer range 0 to 1;
 	signal start_blakley    : std_logic;
 	signal done_calc_blakley: std_logic;
@@ -69,39 +74,30 @@ begin
 
 
 
- 
-process (clk, reset_n)
-begin 
-IF (reset_n = '0') then
-	result <= (others => '0');
-	index := C_block_size-1;
-	ready_in <= '1';
-	valid_out <= '0';
-	State <= idle;
-ELSE
-    d_index <= std_logic_vector(to_unsigned(index, d_index'length)); -- For debugging
-	Case State IS
+process(state, valid_in, ready_out, done_calc_blakley)
+begin
+	Case state IS
 
 	when idle =>
         C <= (others => '0');
         M_reg <= (others => '0');
-        ready_in <= '1';
-		IF (valid_in = '1') and falling_edge(clk) THEN
-			msgout_last <= msgin_last;
-		    valid_out <= '0';
+        ready_in_reg <= '1';
+		IF (valid_in = '1') THEN
+            msgout_last_reg <= msgin_last;
+		    valid_out_reg <= '0';
 			index := 255;
 			K_reg <= key;
 			M_reg <= message;
 			C <= message;
 			start_blakley <= '0';
 			started := 0;
-			State <= find_first_bit;
+			nxt_state <= find_first_bit;
 	   END IF;
 
 	when find_first_bit =>
-        ready_in <= '0';
+        ready_in_reg <= '0';
 		if K_reg(index) = '1' then
-			State <= first_exponentiate;
+			nxt_state <= first_exponentiate;
 		else
 			index := index -1;
 		end if;
@@ -113,7 +109,7 @@ ELSE
             -- Set A=B=C
              index := index -1;
              if index = -1 then
-               State <= done;
+               nxt_state <= done;
              else
                 M <= C;
                 start_blakley <= '1';
@@ -125,9 +121,9 @@ ELSE
             start_blakley <= '0';
             C <= result_blakley;
             if K_reg(index) = '1' then
-                State <= second_exponentiate;
+                nxt_state <= second_exponentiate;
             else 
-                State <= first_exponentiate;
+                nxt_state <= first_exponentiate;
           end if;
         end if;
 
@@ -142,25 +138,40 @@ ELSE
 		      started := 0;
 		      C <= result_blakley;
 			  start_blakley <= '0';
-			  State <= first_exponentiate;
+			  nxt_state <= first_exponentiate;
 		end if;
 		
 	when done=>
-		valid_out <= '1';
-        result <= C;
+		valid_out_reg <= '1';
+        result_reg <= C;
 		if ready_out = '1' then
-			State <= chill;
+			nxt_state <= chill;
 		end if;
 		
 	when chill=>
-	   valid_out <= '0';
-	   State <= idle;
+	   valid_out_reg <= '0';
+	   nxt_state <= idle;
 
 	   
 	when others =>
-		State <= idle;
+		nxt_state <= idle;
 	
 	end case;
+		
+end Process;
+
+ 
+process (clk, reset_n)
+begin 
+	IF (reset_n = '0') then
+		state <= idle;
+	ELSE
+		d_index <= std_logic_vector(to_unsigned(index, d_index'length)); -- For debugging
+		state <= nxt_state;
+		msgout_last <= msgout_last_reg;
+		valid_out <= valid_out_reg;
+		result <= result_reg;
+		ready_in <= ready_in_reg;
 	end if;
 		
 end Process;
