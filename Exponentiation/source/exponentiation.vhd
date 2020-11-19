@@ -74,7 +74,7 @@ begin
 
 
 
-process(state, valid_in, ready_out, done_calc_blakley, msgin_last, key, message, started, K_reg, index, result_blakley, C)
+process(state, valid_in, ready_out, done_calc_blakley, msgin_last, key, message, started, K_reg, index, result_blakley, C, M_reg)
 begin
 	Case state IS
 

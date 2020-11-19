@@ -36,7 +36,7 @@ architecture modmult of blakley is
     TYPE State_type IS (idle, find_first_bit, shift_prod, sub_once, sub_twice, done);  -- Define the states
     SIGNAL state : State_Type;
     SIGNAL nxt_state : State_Type; 
-    signal index : integer range -1 to 256;
+    signal index, index_nxt : integer range -1 to 256;
     signal tmp : STD_LOGIC_VECTOR(C_block_size+1 downto 0);
     signal sub_count : integer range 0 to 3;
 
@@ -44,13 +44,15 @@ begin
 
     process (state, start_calc, tmp, index, A, B, modulus)
     begin
+
+        done_calc <= '0';
         CASE state IS 
         WHEN idle => 
-            done_calc <= '0';
+            
             IF (start_calc = '1') THEN
                 result <= (others => '0'); -- Reset the result
                 tmp <= (others => '0');
-                index <= C_block_size-1;
+                index_nxt <= C_block_size-1;
                 nxt_state <= shift_prod;
                 -- Make modulus *2?
         END IF;
@@ -75,7 +77,7 @@ begin
                 ELSE
                     tmp(C_block_size+1 downto 0) <= std_logic_vector(shift_left(unsigned(tmp), 1));
                 END IF; 
-                index <= index - 1;
+                index_nxt <= index - 1;
                 nxt_state <= sub_once;
            END IF;
  
@@ -106,6 +108,7 @@ begin
 
         WHEN others=>
             nxt_state <= idle;
+            
 
 	END CASE; 
     END process;
@@ -116,10 +119,12 @@ begin
     BEGIN 
 	If (reset_n = '0') THEN 
         state <= idle;
+        index <= 0;
 
  
     ELSIF falling_edge(clk) THEN 
         state <= nxt_state;
+        index <= index_nxt;
     end if;
 
     End process;
