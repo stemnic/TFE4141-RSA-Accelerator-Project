@@ -39,7 +39,7 @@ end exponentiation;
 
 architecture expBehave of exponentiation is -- Using LR_binary
 	signal d_index          : std_logic_vector(9 downto 0); -- For debugging
-	TYPE State_type IS (idle, first_exponentiate, second_exponentiate, find_first_bit, done);  -- Define the states
+	TYPE State_type IS (idle, first_exponentiate, second_exponentiate, find_first_bit, done, chill);  -- Define the states
 	SIGNAL State            : State_Type; 
 	signal C                : STD_LOGIC_VECTOR(C_block_size-1 downto 0);
     signal M 		        : STD_LOGIC_VECTOR ( C_block_size-1 downto 0 );
@@ -87,7 +87,6 @@ ELSE
         M_reg <= (others => '0');
         ready_in <= '1';
 		IF (valid_in = '1') and falling_edge(clk) THEN
-			--result <= (others => '0');
 			msgout_last <= msgin_last;
 		    valid_out <= '0';
 			index := 255;
@@ -150,8 +149,12 @@ ELSE
 		valid_out <= '1';
         result <= C;
 		if ready_out = '1' then
-			State <= idle;
+			State <= chill;
 		end if;
+		
+	when chill=>
+	   valid_out <= '0';
+	   State <= idle;
 
 	   
 	when others =>
