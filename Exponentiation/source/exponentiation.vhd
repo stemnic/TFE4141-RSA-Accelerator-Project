@@ -45,16 +45,16 @@ architecture expBehave of exponentiation is -- Using LR_binary
 
 	signal C                : STD_LOGIC_VECTOR(C_block_size-1 downto 0);
     signal M 		        : STD_LOGIC_VECTOR ( C_block_size-1 downto 0 );
-	shared variable index   : integer range -1 to 256; 
+	signal index, nxt_index : integer range 0 to 256; 
     signal result_blakley   : STD_LOGIC_VECTOR ( C_block_size-1 downto 0 );
-    signal M_reg : STD_LOGIC_VECTOR ( C_block_size-1 downto 0 );
-    signal K_reg : STD_LOGIC_VECTOR ( C_block_size-1 downto 0 );
+    signal M_reg 			: STD_LOGIC_VECTOR ( C_block_size-1 downto 0 );
+    signal K_reg 			: STD_LOGIC_VECTOR ( C_block_size-1 downto 0 );
 
-    signal ready_in_reg     :  STD_LOGIC;
+    signal ready_in_reg     : STD_LOGIC;
     signal valid_out_reg	: STD_LOGIC;
     signal msgout_last_reg	: STD_LOGIC;
-    signal result_reg	: STD_LOGIC_VECTOR(C_block_size-1 downto 0);
-	shared variable started : integer range 0 to 1;
+    signal result_reg		: STD_LOGIC_VECTOR(C_block_size-1 downto 0);
+	signal started 			: integer range 0 to 1;
 	signal start_blakley    : std_logic;
 	signal done_calc_blakley: std_logic;
 
@@ -74,7 +74,7 @@ begin
 
 
 
-process(state, valid_in, ready_out, done_calc_blakley)
+process(state, valid_in, ready_out, done_calc_blakley, msgin_last, key, message, started, K_reg, index, result_blakley, C)
 begin
 	Case state IS
 
@@ -85,12 +85,12 @@ begin
 		IF (valid_in = '1') THEN
             msgout_last_reg <= msgin_last;
 		    valid_out_reg <= '0';
-			index := 255;
+			nxt_index <= 255;
 			K_reg <= key;
 			M_reg <= message;
 			C <= message;
 			start_blakley <= '0';
-			started := 0;
+			started <= 0;
 			nxt_state <= find_first_bit;
 	   END IF;
 
@@ -99,7 +99,7 @@ begin
 		if K_reg(index) = '1' then
 			nxt_state <= first_exponentiate;
 		else
-			index := index -1;
+			nxt_index <= index -1;
 		end if;
 
 	when first_exponentiate =>
@@ -107,17 +107,19 @@ begin
         if done_calc_blakley = '0' and started = 0 then
             -- Do C*C mod N.
             -- Set A=B=C
-             index := index -1;
-             if index = -1 then
+             
+             if index = 0 then
                nxt_state <= done;
              else
                 M <= C;
                 start_blakley <= '1';
-                started := 1;
-             end if;
+				started <= 1;
+				nxt_index <= index -1;
+			 end if;
+			 
             
         elsif done_calc_blakley = '1' and started = 1 then
-            started := 0;
+            started <= 0;
             start_blakley <= '0';
             C <= result_blakley;
             if K_reg(index) = '1' then
@@ -133,9 +135,9 @@ begin
 			-- Do C*M mod N.
 			M <= M_reg;
 			start_blakley <= '1';
-			started := 1;
+			started <= 1;
 		elsif done_calc_blakley = '1' and started = 1 then
-		      started := 0;
+		      started <= 0;
 		      C <= result_blakley;
 			  start_blakley <= '0';
 			  nxt_state <= first_exponentiate;
@@ -165,6 +167,12 @@ process (clk, reset_n)
 begin 
 	IF (reset_n = '0') then
 		state <= idle;
+		d_index <= (others => '0');
+		msgout_last <= '0';
+		valid_out <= '0';
+		result <= (others => '0');
+		ready_in <= '0';
+		index <= 0;
 	ELSE
 		d_index <= std_logic_vector(to_unsigned(index, d_index'length)); -- For debugging
 		state <= nxt_state;
@@ -172,6 +180,7 @@ begin
 		valid_out <= valid_out_reg;
 		result <= result_reg;
 		ready_in <= ready_in_reg;
+		index <= nxt_index;
 	end if;
 		
 end Process;

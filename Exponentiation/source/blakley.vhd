@@ -36,21 +36,21 @@ architecture modmult of blakley is
     TYPE State_type IS (idle, find_first_bit, shift_prod, sub_once, sub_twice, done);  -- Define the states
     SIGNAL state : State_Type;
     SIGNAL nxt_state : State_Type; 
-    shared variable index : integer range -1 to 256;
-    shared variable tmp : STD_LOGIC_VECTOR(C_block_size+1 downto 0);
-    shared variable sub_count : integer range 0 to 3;
+    signal index : integer range -1 to 256;
+    signal tmp : STD_LOGIC_VECTOR(C_block_size+1 downto 0);
+    signal sub_count : integer range 0 to 3;
 
 begin
 
-    process (state, start_calc)
+    process (state, start_calc, tmp, index, A, B, modulus)
     begin
         CASE state IS 
         WHEN idle => 
             done_calc <= '0';
             IF (start_calc = '1') THEN
                 result <= (others => '0'); -- Reset the result
-                tmp := (others => '0');
-                index := C_block_size-1;
+                tmp <= (others => '0');
+                index <= C_block_size-1;
                 nxt_state <= shift_prod;
                 -- Make modulus *2?
         END IF;
@@ -62,32 +62,32 @@ begin
 --                IF A(index) = '1' THEN 
 --                    nxt_state <= shift_prod;
 --                ELSE  
---                    index := index - 1;
+--                    index <= index - 1;
 --                END IF;
 --           END IF;
 
         WHEN shift_prod => 
-            IF index = -1 THEN -- Done calc 
+            IF index = 0 THEN -- Done calc 
                 nxt_state <= done;
             ELSE         
                 IF A(index) = '1' THEN 
-                    tmp(C_block_size+1 downto 0) := std_logic_vector(shift_left(unsigned(tmp), 1) + unsigned(B));  
+                    tmp(C_block_size+1 downto 0) <= std_logic_vector(shift_left(unsigned(tmp), 1) + unsigned(B));  
                 ELSE
-                    tmp(C_block_size+1 downto 0) := std_logic_vector(shift_left(unsigned(tmp), 1));
+                    tmp(C_block_size+1 downto 0) <= std_logic_vector(shift_left(unsigned(tmp), 1));
                 END IF; 
-                index := index - 1;
+                index <= index - 1;
                 nxt_state <= sub_once;
            END IF;
  
         WHEN sub_once => 
---            sub_count := sub_count + 1;
+--            sub_count <= sub_count + 1;
 
 --            IF sub_count = 3 THEN -- Do subtraction at most twice
---                sub_count := 0;
+--                sub_count <= 0;
 --                nxt_state <= shift_prod;
 --            ELSE
                 IF (tmp >= modulus) THEN
-                        tmp := STD_LOGIC_VECTOR(tmp - modulus);
+                        tmp <= STD_LOGIC_VECTOR(tmp - modulus);
                         nxt_state <= sub_twice;
                 else 
                     nxt_state <= shift_prod;
@@ -95,7 +95,7 @@ begin
                             
         WHEN sub_twice =>
                 IF (tmp >= modulus) THEN
-                    tmp := STD_LOGIC_VECTOR(tmp - modulus);
+                    tmp <= STD_LOGIC_VECTOR(tmp - modulus);
                 END IF;
                 nxt_state <= shift_prod;
 		
